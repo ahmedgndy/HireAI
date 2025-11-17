@@ -20,9 +20,13 @@ namespace HireAI.Data.Models
         public string? Experience { get; set; }
         public float? YearsOfExperience { get; set; }
         public string? Certifications { get; set; }
-
         public Guid CandidateId { get; set; } 
         public Applicant Candidate { get; set; } = null!;
         public ICollection<CandidateCVSkill>? CandidateCVSkills { get; set; }
+
+        public float? YearOfExperience { get; set; }
+
+   
+        public Guid CandidatedId { get; set; }
     }
 }

@@ -5,11 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace HireAI.Data.Models
 {
     public class TestAttempt
     {
+
        
         public Guid Id { get; set; }
 
@@ -24,8 +26,10 @@ namespace HireAI.Data.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation
+      
         public ICollection<CandidateResponse>? CandidateResponses { get; set; }
         public TestEvaluation? TestEvaluation { get; set; }
+    
+
     }
 }

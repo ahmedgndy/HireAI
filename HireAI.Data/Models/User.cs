@@ -21,7 +21,7 @@ namespace HireAI.Data.Models
         public string? Phone { get; set; }
         public string? Bio { get; set; }
         public string? Title { get; set; }
-        public DateTime? LastLogin { get; set; };
+        public DateTime? LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }
         }
     }

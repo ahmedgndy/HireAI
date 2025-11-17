@@ -11,6 +11,7 @@ namespace HireAI.Data.Models
     public class TestEvaluation
     {
 
+
         public Guid Id { get; set; }
 
         public Guid TestAttemptId { get; set; }
@@ -20,5 +21,10 @@ namespace HireAI.Data.Models
         public float MaxTotal { get; set; }
         public bool Passed { get; set; }
         public DateTime? EvaluatedAt { get; set; }
+
+
+        public int Status { get; set; }
+
+
     }
 }
