@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Models
 {
-    internal class Applicants
+    public class Applicant: User
     {
+        public string ResumeUrl { get; set; } = null!;
+       
     }
 }

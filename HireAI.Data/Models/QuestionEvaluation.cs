@@ -12,10 +12,10 @@ namespace HireAI.Data.Models
 
         public Guid ResponseId { get; set; } // Foreign Key to Response
 
-        public bool IsvCorrect { get; set; } = false;
+        public bool IsCorrect { get; set; } = false;
 
         public  string Feedback { get; set; } = null!;
 
-        public DateTime EvaluatedAt { get; set; }
+        public DateTime EvaluatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Models
 {
-    internal class HR
+    public class HR
     {
+        public string CompanyName { get; set; } = null!;
     }
 }

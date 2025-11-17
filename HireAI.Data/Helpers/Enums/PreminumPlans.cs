@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Helpers.Enums
 {
-     public enum ExperienceLevel
+    public enum PreminumPlans
     {
-        EntryLevel,
-        Junior,
-        Senior,
-        TeamLead,
+        Free, 
     }
 }

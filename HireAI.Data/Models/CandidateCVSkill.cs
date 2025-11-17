@@ -9,7 +9,9 @@ namespace HireAI.Data.Models
     public class CandidateCVSkill
     {
         public Guid Id { get; set; }
+        public string? Name { get; set; }
+
         public Guid CVId { get; set; }
-        public string SkillName { get; set; }
+        
     }
 }

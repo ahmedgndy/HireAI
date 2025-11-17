@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAI.Data.Models
+namespace HireAI.Data.Helpers.Enums
 {
-    internal class Jobs
+    internal class EmploymentType
     {
     }
 }

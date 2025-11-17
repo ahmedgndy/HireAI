@@ -17,11 +17,8 @@ namespace HireAI.Data.Models
 
         public int QuestionNumber { get; set; }
         private Question() { }
-        public Question(Guid testId, string questionText, QuestionAnswers  answer )
-        {
-            TestId = testId;
-            QuestionText = questionText;
-            Answer = answer;
-        }   
+
+        public ICollection<Answer>? Answers { get; set; }
+        public ICollection<CandidateResponse>? CandidateResponses { get; set; }
     }
 }

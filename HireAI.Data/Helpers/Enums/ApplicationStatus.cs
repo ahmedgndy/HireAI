@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAI.Data.Models
+namespace HireAI.Data.Helpers.Enums
 {
-    internal class Applications
+    public enum ApplicationStatus
     {
+        accepted , rejected , pending , under_review
     }
 }

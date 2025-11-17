@@ -5,8 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace HireAI.Data.Helpers.Enums
+
+
 {
-    internal class Role
+
+    public enum Role
     {
+        Admin,
+        Recruiter,
+        Applicant
     }
 }
