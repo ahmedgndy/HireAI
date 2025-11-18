@@ -7,7 +7,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="APIBases\**" />
+    <Compile Remove="Controllers\**" />
+    <Content Remove="APIBases\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="APIBases\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="APIBases\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
   </ItemGroup>
 
@@ -15,11 +35,6 @@
     <ProjectReference Include="..\HireAI.Core\HireAI.Core.csproj" />
     <ProjectReference Include="..\HireAI.Infrastructure\HireAI.Infrastructure.csproj" />
     <ProjectReference Include="..\HireAI.Service\HireAI.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="APIBases\" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>
