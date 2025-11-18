@@ -10,7 +10,6 @@ namespace HireAI.Data.Models
 {
     public class CV
     {
-
         public int Id { get; set; }
         public string? Phone { get; set; }
         public string? LinkedInPath { get; set; }
@@ -21,9 +20,9 @@ namespace HireAI.Data.Models
         public float? YearsOfExperience { get; set; }
         public List<string>? Certifications { get; set; }
 
-        public int ApplicantId { get; set; }
 
-        //Navigation Property
+         //Navigation to applicant 
+        public int ApplicantId { get; set; }
         public Applicant? Applicant { get; set; }
     }
 }

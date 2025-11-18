@@ -9,16 +9,15 @@ namespace HireAI.Data.Models
 {
     public   class ApplicantSkill
     {
-
         public int Id { get; set; }
+        public int SkillId { get; set; }
+        public Skill Skill { get; set; } = null!;
+        public float? SkillRate { get; set; }
 
-        public int ApplicantId { get; set; } // Applicant Id
+        //navigations 
+        public int ApplicantId { get; set; } //fk
         public Applicant Applicant { get; set; }
 
-        public int SkillId { get; set; }
-      
-        public Skill Skill { get; set; } = null!;
 
-        public float? SkillRate { get; set; }
     }
 }

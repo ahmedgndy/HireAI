@@ -9,10 +9,7 @@ namespace HireAI.Data.Models
     //just to upload this for the team 
     public class Exam
     {
-
         public int Id { get; set; }
-
-
         public int ApplicantId { get; set; } // Applicant Id
         public int ApplicationId { get; set; }//foreign key to Application
         public Application? Application { get; set; }
@@ -22,8 +19,8 @@ namespace HireAI.Data.Models
         public String TestName { get; set; } = null!;
         public bool IsAi { get; set; } = true;
 
-
-        private Exam() { }
+        //naviagation to Questions
+        public ICollection<Question> Questions { get; set; } = new HashSet<Question>();  
 
     }
 }

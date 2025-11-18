@@ -16,7 +16,7 @@ namespace HireAI.Data.Models
         public string Email { get; set; }
         public Role Role { get; set; }
         public bool IsPremium { get; set; } = false;
-        public AccountType preminumPlans { get; set; } = AccountType.Free;
+        public AccountType PreminumPlans { get; set; } = AccountType.Free;
         public string? Phone { get; set; }
         public string? Bio { get; set; }
         public string? Title { get; set; }

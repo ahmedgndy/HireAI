@@ -22,7 +22,7 @@ namespace HireAI.Data.Models
         public AccountType UpgradeTo { get; set; }
         public BillingPeriod BillingPeriod { get; set; }
 
-        public int UserId { get; set; } // Foreign key
+        public int UserId { get; set; } 
         public virtual User User { get; set; }
 
     }

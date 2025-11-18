@@ -14,6 +14,7 @@ namespace HireAI.Data.Models
 
        
         public int Id { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public int JobId { get; set; }
         public JobOpening Job { get; set; } = null!;
@@ -24,12 +25,8 @@ namespace HireAI.Data.Models
         public int TestId { get; set; }
         public Exam Test { get; set; } = null!;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-      
         public ICollection<ApplicantResponse>? ApplicantResponses { get; set; }
         public TestEvaluation? TestEvaluation { get; set; }
-    
 
     }
 }

@@ -16,12 +16,10 @@ namespace HireAI.Data.Models
         public DateTime? PremiumExpiry { get; set; }
 
 
-        // Navigation Property
+        // Navigation  oppenintJobs , Applications , Payments
         public virtual ICollection<JobOpening>? HRJobs { get; set; } = new HashSet<JobOpening>(); // jobs created by HR users
         public virtual ICollection<Application>? Applications { get; set; } = new HashSet<Application>();
         public virtual ICollection<Payment> Payments { get; set; } = new HashSet<Payment>();
-
-
     }
 }
 

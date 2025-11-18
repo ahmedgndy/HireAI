@@ -12,11 +12,10 @@ namespace HireAI.Data.Models
     {
      
         public Guid Id { get; set; }
-
         public int UserId { get; set; }
         public User User { get; set; } = null!;
 
-        public PaymentMethod Type { get; set; } // e.g., 0=CreditCard,1=PayPal,2=MobileWallet...
+        public PaymentMethod Type { get; set; } 
         public string? Last4Digits { get; set; }
         public bool IsDefault { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

@@ -9,12 +9,8 @@ namespace HireAI.Data.Models
 {
     public class JobOpening
     {
-
         public int Id { get; set; }
-
-        public int HRId { get; set; }
-        public HR HR { get; set; }
-
+  
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -30,6 +26,8 @@ namespace HireAI.Data.Models
         public bool AutoSend { get; set; } = false;
 
         // Navigation
+        public int HRId { get; set; }
+        public HR HR { get; set; }
         public ICollection<JobSkill>? JobSkills { get; set; }
         public ICollection<Application>? Applications { get; set; }
         public ICollection<TestAttempt>? TestAttempts { get; set; }

@@ -12,6 +12,6 @@ namespace HireAI.Data.Models
         public string Text { get; set; } = null!;
         public bool IsCorrect { get; set; } = false;
 
-        public int QuestionId { get; set; } 
+        public int QuestionId { get; set; }  //fk to question
     }
 }

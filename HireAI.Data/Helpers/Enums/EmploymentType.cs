@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Helpers.Enums
 {
-    internal class EmploymentType
+    public enum EmploymentType
     {
+        FullTime, 
+        PartTime,
+        FreeLance 
+
     }
 }
