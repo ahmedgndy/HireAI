@@ -31,7 +31,7 @@ namespace HireAI.Data.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(hr => hr.Payments)
-                .WithOne(p => p.User)
+                .WithOne(p => p.HR)
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

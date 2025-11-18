@@ -40,7 +40,7 @@ namespace HireAI.Data.Configurations
                 .IsRequired();
 
             // Foreign Key
-            builder.HasOne(p => p.User)
+            builder.HasOne(p => p.HR)
                 .WithMany()
                 .HasForeignKey(p => p.UserId)
                 .IsRequired()

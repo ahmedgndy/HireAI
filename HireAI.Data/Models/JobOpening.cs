@@ -14,7 +14,7 @@ namespace HireAI.Data.Models
         public string Title { get; set; } = null!;
         public string? Description { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public JobStatus Status { get; set; } = JobStatus.Open;
+        public enJobStatus Status { get; set; } = enJobStatus.Open;
         public int? ExamDurationMinutes { get; set; } // in minutes
         public int? ExperienceLevel { get; set; }
         public int? EmploymentType { get; set; }

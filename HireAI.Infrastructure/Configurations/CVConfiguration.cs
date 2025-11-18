@@ -31,12 +31,6 @@ namespace HireAI.Data.Configurations
             builder.Property(cv => cv.YearsOfExperience)
                 .IsRequired(false);
 
-            builder.Property(cv => cv.Certifications)
-                .HasMaxLength(2000)
-                .HasConversion(
-                    v => v != null ? string.Join(";", v) : null,
-                    v => v != null ? v.Split(";").ToList() : null);
-
             // Foreign Key
             builder.HasOne(cv => cv.Applicant)
                 .WithOne(a => a.ApplicantCV)

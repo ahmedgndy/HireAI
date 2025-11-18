@@ -50,10 +50,10 @@ namespace HireAI.Data.Configurations
                 .IsUnique();
 
             // Configure discriminator for TPH (Table Per Hierarchy)
-            builder.HasDiscriminator<string>("UserType")
-                .HasValue<User>("User")
-                .HasValue<HR>("HR")
-                .HasValue<Applicant>("Applicant");
+            //builder.HasDiscriminator<string>("UserType")
+            //    .HasValue<User>("User")
+            //    .HasValue<HR>("HR")
+            //    .HasValue<Applicant>("Applicant");
         }
     }
 }
