@@ -21,6 +21,7 @@
     <Folder Include="GenericBase\" />
     <Folder Include="Implementation\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Context\" />
     <Folder Include="Respositories\" />
     <Folder Include="Seeding\" />
   </ItemGroup>

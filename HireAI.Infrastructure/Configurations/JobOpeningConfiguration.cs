@@ -60,11 +60,7 @@ namespace HireAI.Data.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Navigation properties
-            builder.HasMany(j => j.JobSkills)
-                .WithOne(js => js.Job)
-                .HasForeignKey(js => js.JobId)
-                .OnDelete(DeleteBehavior.Cascade);
-
+      
             builder.HasMany(j => j.Applications)
                 .WithOne(a => a.AppliedJob)
                 .HasForeignKey(a => a.JobId)

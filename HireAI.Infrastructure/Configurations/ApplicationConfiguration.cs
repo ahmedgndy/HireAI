@@ -30,17 +30,6 @@ namespace HireAI.Data.Configurations
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(a => a.Applicant)
-                .WithMany(app => app.Applications)
-                .HasForeignKey(a => a.ApplicantId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(a => a.AppliedJob)
-                .WithMany(j => j.Applications)
-                .HasForeignKey(a => a.JobId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(a => a.Exam)
                 .WithOne(e => e.Application)

@@ -39,12 +39,7 @@ namespace HireAI.Data.Configurations
             builder.Property(p => p.BillingPeriod)
                 .IsRequired();
 
-            // Foreign Key
-            builder.HasOne(p => p.HR)
-                .WithMany()
-                .HasForeignKey(p => p.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Unique constraint for PaymentIntentId
             builder.HasIndex(p => p.PaymentIntentId)

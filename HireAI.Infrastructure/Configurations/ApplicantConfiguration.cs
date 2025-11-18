@@ -9,11 +9,8 @@ namespace HireAI.Data.Configurations
         public void Configure(EntityTypeBuilder<Applicant> builder)
         {
             builder.Property(a => a.ResumeUrl)
-                .IsRequired()
-                .HasMaxLength(500);
+                .HasColumnType("varchar(200)");
 
-            builder.Property(a => a.CvId)
-                .IsRequired();
 
             // Navigation properties
             builder.HasMany(a => a.ApplicantSkills)
@@ -31,17 +28,10 @@ namespace HireAI.Data.Configurations
                 .HasForeignKey(e => e.ApplicantId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(a => a.ExamAttempts)
-                .WithMany()
-                .UsingEntity("ApplicantExamAttempt");
+  
 
-            builder.HasOne(a => a.ApplicantCV)
-                .WithOne(cv => cv.Applicant)
-                .HasForeignKey<CV>(cv => cv.ApplicantId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Indexes
-            builder.HasIndex(a => a.CvId);
+        
+        
         }
     }
 }

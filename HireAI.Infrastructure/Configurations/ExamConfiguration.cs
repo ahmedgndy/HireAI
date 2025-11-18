@@ -28,11 +28,7 @@ namespace HireAI.Data.Configurations
                 .HasDefaultValue(true);
 
             // Foreign Keys
-            builder.HasOne(e => e.Applicant)
-                .WithMany(a => a.Exams)
-                .HasForeignKey(e => e.ApplicantId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+           
 
             builder.HasOne(e => e.Application)
                 .WithOne(a => a.Exam)
@@ -41,10 +37,7 @@ namespace HireAI.Data.Configurations
                 .OnDelete(DeleteBehavior.Cascade);
 
             // Navigation property
-            builder.HasMany(e => e.Questions)
-                .WithOne(q => q.Exam)
-                .HasForeignKey(q => q.ExamId)
-                .OnDelete(DeleteBehavior.Cascade);
+       
 
             // Indexes
             builder.HasIndex(e => e.ApplicantId);

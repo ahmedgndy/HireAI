@@ -32,11 +32,7 @@ namespace HireAI.Data.Configurations
                 .IsRequired(false);
 
             // Foreign Key
-            builder.HasOne(cv => cv.Applicant)
-                .WithOne(a => a.ApplicantCV)
-                .HasForeignKey<CV>(cv => cv.ApplicantId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
+
 
             // Index
             builder.HasIndex(cv => cv.ApplicantId)

@@ -14,12 +14,7 @@ namespace HireAI.Data.Configurations
                 .IsRequired(false);
 
             // Foreign Key
-            builder.HasOne(asn => asn.Applicant)
-                .WithMany(a => a.ApplicantSkills)
-                .HasForeignKey(asn => asn.ApplicantId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.Cascade);
-
+    
             // Many-to-many relationship with Skills
             builder.HasMany(asn => asn.Skills)
                 .WithMany()
