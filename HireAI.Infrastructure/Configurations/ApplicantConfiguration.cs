@@ -1,6 +1,7 @@
 using HireAI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace HireAI.Data.Configurations
 {
@@ -17,6 +18,13 @@ namespace HireAI.Data.Configurations
                 .WithOne(asn => asn.Applicant)
                 .HasForeignKey(asn => asn.ApplicantId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Navigation properties
+        builder
+      .HasOne(a => a.CV)
+      .WithOne(c => c.Applicant)
+      .HasForeignKey<CV>(c => c.ApplicantId);   // CV is the dependent
+     
 
             builder.HasMany(a => a.Applications)
                 .WithOne(app => app.Applicant)

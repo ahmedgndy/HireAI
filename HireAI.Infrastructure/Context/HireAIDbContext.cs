@@ -1,7 +1,8 @@
-using HireAI.Data.Models;
 using HireAI.Data.Helpers.Enums;
+using HireAI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 
 namespace HireAI.Infrastructure.Context
@@ -34,6 +35,7 @@ namespace HireAI.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           
             //TPC
             modelBuilder.Entity<HR>().ToTable("HRs");
             modelBuilder.Entity<Applicant>().ToTable("Applicant");

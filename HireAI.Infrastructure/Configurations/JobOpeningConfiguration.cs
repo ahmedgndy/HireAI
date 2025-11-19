@@ -1,3 +1,4 @@
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -21,9 +22,7 @@ namespace HireAI.Data.Configurations
                 .IsRequired()
                 .HasDefaultValueSql("GETUTCDATE()");
 
-            builder.Property(j => j.Status)
-                .IsRequired()
-                .HasDefaultValue(0); // JobStatus.Open
+
 
             builder.Property(j => j.ExamDurationMinutes)
                 .IsRequired(false);
@@ -52,6 +51,14 @@ namespace HireAI.Data.Configurations
             builder.Property(j => j.AutoSend)
                 .HasDefaultValue(false);
 
+
+            builder.Property(j => j.JobStatus)
+              .HasConversion(
+                v => v.ToString(),// Converts the enum to string when saving to the database                  
+               v => (enJobStatus)Enum.Parse(typeof(enJobStatus), v)// Converts the string back to enum when reading from the database
+                )
+              .HasDefaultValue(enJobStatus.Active);
+
             // Foreign Key
             builder.HasOne(j => j.HR)
                 .WithMany(hr => hr.HRJobs)
@@ -75,8 +82,6 @@ namespace HireAI.Data.Configurations
 
             // Indexes
             builder.HasIndex(j => j.HRId);
-            builder.HasIndex(j => j.Status);
-            builder.HasIndex(j => new { j.HRId, j.Status });
 
             // Check constraints
             builder.ToTable(t => t.HasCheckConstraint("CK_JobOpening_ExamDuration", "[ExamDurationMinutes] > 0 OR [ExamDurationMinutes] IS NULL"));

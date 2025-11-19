@@ -1,3 +1,4 @@
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -33,8 +34,11 @@ namespace HireAI.Data.Configurations
             builder.Property(u => u.IsPremium)
                 .HasDefaultValue(false);
 
-            builder.Property(u => u.AccountPlan)
-                .HasDefaultValue(0); // AccountType.Free
+            builder.Property(u => u.AccountType)
+                  .HasConversion(
+                v => v.ToString(),// Converts the enum to string when saving to the database                  
+               v => (enAccountType)Enum.Parse(typeof(enAccountType), v)// Converts the string back to enum when reading from the database
+                );
 
             builder.Property(u => u.IsActive)
                 .IsRequired();
