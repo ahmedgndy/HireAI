@@ -27,10 +27,6 @@ namespace HireAI.Data.Configurations
                 .WithOne(e => e.Applicant)
                 .HasForeignKey(e => e.ApplicantId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-  
-
-        
         
         }
     }

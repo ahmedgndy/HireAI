@@ -17,8 +17,8 @@ namespace HireAI.Data.Configurations
     
             // Many-to-many relationship with Skills
             builder.HasMany(asn => asn.Skills)
-                .WithMany()
-                .UsingEntity("ApplicantSkillJoin");
+                 .WithMany(a => a.ApplicantSkills)
+                 .UsingEntity("ApplicantSkillJoin");
 
             // Index
             builder.HasIndex(asn => asn.ApplicantId);

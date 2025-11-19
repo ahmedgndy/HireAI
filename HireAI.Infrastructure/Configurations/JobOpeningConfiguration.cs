@@ -71,9 +71,7 @@ namespace HireAI.Data.Configurations
                 .HasForeignKey(ee => ee.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasMany(j => j.Applicants)
-                .WithMany()
-                .UsingEntity("JobApplicant");
+    
 
             // Indexes
             builder.HasIndex(j => j.HRId);
