@@ -16,7 +16,6 @@ namespace HireAI.Infrastructure.Context
         }
 
         // DbSets for concrete entities
-        public DbSet<User> Users { get; set; } = default!;
         public DbSet<Applicant> Applicants { get; set; } = default!;
         public DbSet<HR> HRs { get; set; } = default!;
         public DbSet<JobOpening> JobOpenings { get; set; } = default!;
@@ -36,9 +35,13 @@ namespace HireAI.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // TPT (Table Per Type) 
+            // TPC (Table Per Concrete class) 
+            //configure root 
+            modelBuilder.Entity<User>().UseTpcMappingStrategy();
+            //map concrete type 
             modelBuilder.Entity<HR>().ToTable("HRs");
-            modelBuilder.Entity<Applicant>().ToTable("Applicant");
+            modelBuilder.Entity<Applicant>().ToTable("Applicants");
+
 
             // Apply configuration classes from this assembly (IEntityTypeConfiguration implementations)
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(HireAIDbContext).Assembly);
@@ -50,7 +53,7 @@ namespace HireAI.Infrastructure.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source =.; Initial Catalog = HireAIDb; Integrated Security = True; Encrypt = False");
+            optionsBuilder.UseSqlServer("Data Source =(localdb)\\MSSQLLocalDB; Initial Catalog = HireAIDb; Integrated Security = True; Encrypt = False");
         }
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireAI.Infrastructure.Migrations
 {
     [DbContext(typeof(HireAIDbContext))]
-    [Migration("20251119200136_Add_Identity_Tables")]
-    partial class Add_Identity_Tables
+    [Migration("20251120093556_Migrate_User_To_TPC")]
+    partial class Migrate_User_To_TPC
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,8 @@ namespace HireAI.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.HasSequence("UserSequence");
 
             modelBuilder.Entity("HireAI.Data.Models.Answer", b =>
                 {
@@ -749,9 +751,10 @@ namespace HireAI.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasDefaultValueSql("NEXT VALUE FOR [UserSequence]");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseSequence(b.Property<int>("Id"));
 
                     b.Property<string>("Bio")
                         .HasMaxLength(500)
@@ -798,9 +801,9 @@ namespace HireAI.Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable((string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -956,7 +959,7 @@ namespace HireAI.Infrastructure.Migrations
 
                     b.HasIndex("JobOpeningId");
 
-                    b.ToTable("Applicant", (string)null);
+                    b.ToTable("Applicants", (string)null);
                 });
 
             modelBuilder.Entity("HireAI.Data.Models.HR", b =>
@@ -1279,26 +1282,11 @@ namespace HireAI.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HireAI.Data.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("HireAI.Data.Models.Applicant", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HireAI.Data.Models.JobOpening", null)
                         .WithMany("Applicants")
                         .HasForeignKey("JobOpeningId");
 
                     b.Navigation("CV");
-                });
-
-            modelBuilder.Entity("HireAI.Data.Models.HR", b =>
-                {
-                    b.HasOne("HireAI.Data.Models.User", null)
-                        .WithOne()
-                        .HasForeignKey("HireAI.Data.Models.HR", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("HireAI.Data.Models.ApplicantResponse", b =>

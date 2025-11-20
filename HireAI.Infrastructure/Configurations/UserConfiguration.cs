@@ -5,7 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HireAI.Data.Configurations
 {
-    public class UserConfiguration : IEntityTypeConfiguration<User>
+    public class 
+        
+        Configuration : IEntityTypeConfiguration<User>
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
@@ -54,11 +56,7 @@ namespace HireAI.Data.Configurations
             builder.HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Configure discriminator for TPH (Table Per Hierarchy)
-            //builder.HasDiscriminator<string>("UserType")
-            //    .HasValue<User>("User")
-            //    .HasValue<HR>("HR")
-            //    .HasValue<Applicant>("Applicant");
+
         }
     }
 }

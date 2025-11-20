@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Models
 {
-    public class User
+    // Base User Class for Applicant and HR (TPC configurations)
+    public abstract  class User
     {
         public int Id { get; set; }
         public string Name { get; set; } = default!;
@@ -21,8 +22,6 @@ namespace HireAI.Data.Models
         public bool IsActive { get; set; }
         public DateTime? LastLogin { get; set; }
         public DateTime CreatedAt { get; set; }
-
-
     }
 }
 
