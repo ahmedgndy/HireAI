@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Models
 {
-    internal class ApplicantSkill
+    public class ApplicantSkill
     {
+        int Id { get; set; }
+        int CandidateId { get; set; }
+        int SkillId { get; set; }
+        float SkillRate { get; set; }
     }
 }
