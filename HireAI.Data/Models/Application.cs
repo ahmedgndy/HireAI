@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HireAI.Data.Helpers.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace HireAI.Data.Models
     public  class Application
     {
         public int Id { get; set; }
-        public int ApplicationStatus { get; set; }
+        public enApplicationStatus ApplicationStatus { get; set; }
         public DateTime DateApplied { get; set; } = DateTime.UtcNow;
         public string? CVFilePath { get; set; }
         public float? ScoreATS { get; set; }
@@ -26,7 +27,10 @@ namespace HireAI.Data.Models
         public JobOpening? AppliedJob { get; set; }
         public Exam? Exam { get; set; }
         public ExamSummary? ExamSummary { get; set; }
-        
-         
+
+        //add this exam status
+        public enExamStatus? ExamStatus { get; set; }
+
+
     }
 }

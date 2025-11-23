@@ -11,7 +11,7 @@ namespace HireAI.Data.Helpers.DTOs.Respones
 {
     public class RecentApplicationDto
     {
-           public int ApplicatName { get; set; }
+          public String ApplicantName { get; set; }
           public string Position { get; set; } = string.Empty;
           //for sort on the front end
           public DateTime AppliedOn { get; set; }

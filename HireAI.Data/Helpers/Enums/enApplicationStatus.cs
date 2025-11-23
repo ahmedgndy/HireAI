@@ -8,6 +8,6 @@ namespace HireAI.Data.Helpers.Enums
 {
     public enum enApplicationStatus
     {
-        accepted , rejected , pending , under_review
+        ExamSent, ATSPassed, UnderReview, Completed, rejected
     }
 }

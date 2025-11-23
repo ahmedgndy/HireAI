@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HireAI.Data.Helpers.DTOs.Respones
 {
-    internal class ActiveJopPosting
+    public class ActiveJopPosting
     {
         public string JobTitle { get; set; } = string.Empty;
         public int ApplicationTotalCount { get; set; }
