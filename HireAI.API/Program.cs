@@ -1,6 +1,6 @@
-
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+using HireAI.Infrastructure.Mappings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +51,10 @@ namespace HireAI.API
                 .AddEntityFrameworkStores<HireAIDbContext>()
                 .AddDefaultTokenProviders();
 
+            #endregion
+
+            #region Add AutoMapper service
+            builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationProfile).Assembly);
             #endregion
 
             var app = builder.Build();

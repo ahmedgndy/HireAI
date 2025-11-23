@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HireAI.Data.Helpers.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace HireAI.Data.Models
         public DateTime CreatedAt { get; set; }
         public string ExamName { get; set; } = default!;
         public bool IsAi { get; set; } = true;
+        public enExamType ExamType { get; set; } = enExamType.MockExam;
 
         //Foreign Keys
         public int ApplicantId { get; set; }

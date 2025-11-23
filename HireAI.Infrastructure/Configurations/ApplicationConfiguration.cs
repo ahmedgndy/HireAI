@@ -1,3 +1,4 @@
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -20,7 +21,7 @@ namespace HireAI.Data.Configurations
             builder.Property(a => a.CVFilePath)
                 .HasMaxLength(500);
 
-            builder.Property(a => a.ScoreATS)
+            builder.Property(a => a.AtsScore)
                 .IsRequired(false);
 
             // Foreign Keys
@@ -42,6 +43,13 @@ namespace HireAI.Data.Configurations
                 .HasForeignKey<Application>(a => a.Id)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            //Type Conversion
+            builder.Property(a => a.ApplicationStatus)
+            .HasConversion(
+              v => v.ToString(),// Converts the enum to string when saving to the database                  
+             v => (enApplicationStatus)Enum.Parse(typeof(enApplicationStatus), v)// Converts the string back to enum when reading from the database
+              );
 
             // Indexes
             builder.HasIndex(a => a.HRId);
