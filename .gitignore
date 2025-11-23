@@ -69,7 +69,8 @@ node_modules/
 # =========================
 # DO NOT IGNORE (KEEP THESE IN GIT)
 # =========================
+# EF Core Migrations temp
+Migrations/
+MigrationsBackup/
 
-
-/HireAI.Infrastructure/Migrations/20251120124954_Initiating Tables and Add_Identity_Tables.cs
-/HireAI.Infrastructure/Migrations/HireAIDbContextModelSnapshot.cs
+/HireAI.Infrastructure/Migrations
