@@ -143,6 +143,9 @@ namespace HireAI.Infrastructure.Migrations
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ExamStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("HRId")
                         .HasColumnType("int");
 
@@ -341,6 +344,9 @@ namespace HireAI.Infrastructure.Migrations
 
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
+
+                    b.Property<float>("TotalScroe")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

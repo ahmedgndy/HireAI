@@ -12,9 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HireAI.Infrastructure.Migrations
 {
     [DbContext(typeof(HireAIDbContext))]
-
-    [Migration("20251120124954_Initiating Tables and Add_Identity_Tables")]
-    partial class InitiatingTablesandAdd_Identity_Tables
+    [Migration("20251123185248_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -145,6 +144,9 @@ namespace HireAI.Infrastructure.Migrations
                         .HasDefaultValueSql("GETUTCDATE()");
 
                     b.Property<int>("ExamId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ExamStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("HRId")
@@ -345,6 +347,9 @@ namespace HireAI.Infrastructure.Migrations
 
                     b.Property<int>("ExamId")
                         .HasColumnType("int");
+
+                    b.Property<float>("TotalScroe")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

@@ -1,6 +1,7 @@
 
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+using HireAI.Seeder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,7 +9,7 @@ namespace HireAI.API
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -53,7 +54,30 @@ namespace HireAI.API
 
             #endregion
 
+
             var app = builder.Build();
+
+            // Apply migrations & seed database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    // Apply migrations
+                    var context = services.GetRequiredService<HireAIDbContext>();
+                    await context.Database.MigrateAsync();
+
+                    // Seed data
+                    await DbSeeder.SeedAsync(services);
+                    Console.WriteLine("Database seeded successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"An error occurred while seeding the database: {ex.Message}");
+                }
+            }
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

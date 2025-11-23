@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HireAI.Infrastructure.Migrations
 {
-
-    public partial class InitiatingTablesandAdd_Identity_Tables : Migration
+    /// <inheritdoc />
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -157,7 +157,6 @@ namespace HireAI.Infrastructure.Migrations
                     CompletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpgradeTo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BillingPeriod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-
                     HrId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -301,7 +300,8 @@ namespace HireAI.Infrastructure.Migrations
                     HRId = table.Column<int>(type: "int", nullable: false),
                     ApplicantId = table.Column<int>(type: "int", nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false),
-                    ExamId = table.Column<int>(type: "int", nullable: false)
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    ExamStatus = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -516,6 +516,7 @@ namespace HireAI.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
+                    TotalScroe = table.Column<float>(type: "real", nullable: false),
                     ApplicationId = table.Column<int>(type: "int", nullable: false),
                     ExamId = table.Column<int>(type: "int", nullable: false),
                     ExamEvaluationId = table.Column<int>(type: "int", nullable: true),
