@@ -68,7 +68,11 @@ namespace HireAI.API
             builder.Services.AddScoped<ApplicantDashboardService>();
             builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+
             builder.Services.AddScoped<IHrDashboardService, HRDashBoardService>(); 
+
+            builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
+            builder.Services.AddScoped<IJopOpenningService, JobOpeningService>();
             #endregion
 
             #region Add AutoMapper service

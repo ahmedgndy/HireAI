@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace HireAI.Service.Implementation
 {
-    internal class JobOpeningService: IJopOpenningService
+    public class JobOpeningService: IJopOpenningService
     {
         private readonly IMapper _mapper;
         private readonly IJobOpeningRepository _jobOpeningRepository;
