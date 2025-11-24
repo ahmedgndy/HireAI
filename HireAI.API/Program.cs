@@ -1,10 +1,8 @@
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
-<<<<<<< HEAD
 
-=======
 using HireAI.Infrastructure.GenaricBasies;
->>>>>>> ApplicantRepo
+
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Infrastructure.Repositories;
