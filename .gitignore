@@ -71,3 +71,4 @@ node_modules/
 # =========================
 
 
+/HireAI.API/appsettings.json
