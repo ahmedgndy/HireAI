@@ -1,6 +1,10 @@
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+<<<<<<< Updated upstream
 
+=======
+using HireAI.Infrastructure.GenaricBasies;
+>>>>>>> Stashed changes
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Infrastructure.Repositories;
