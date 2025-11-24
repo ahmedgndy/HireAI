@@ -11,6 +11,8 @@ using HireAI.Seeder;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using HireAI.Service.Interfaces;
+using HireAI.Service.Implementions;
 
 namespace HireAI.API
 {
@@ -66,6 +68,9 @@ namespace HireAI.API
             builder.Services.AddScoped<IApplicantSkillRepository, ApplicantSkillRepository>();
             builder.Services.AddScoped<IApplicantDashboardService, ApplicantDashboardService>();
             builder.Services.AddScoped<ApplicantDashboardService>();
+            builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
+            builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+            builder.Services.AddScoped<IHrDashboardService, HRDashBoardService>(); 
             #endregion
 
             #region Add AutoMapper service
@@ -74,6 +79,7 @@ namespace HireAI.API
 
 
             var app = builder.Build();
+
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -90,8 +96,6 @@ namespace HireAI.API
                         await context.Database.MigrateAsync();
                         logger.LogInformation("Database migrated successfully.");
 
-                        await DbSeeder.SeedAsync(services);
-                        Console.WriteLine("Database seeded successfully.");
                     }
                     else
                     {
@@ -113,7 +117,6 @@ namespace HireAI.API
             }
 
             
-
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

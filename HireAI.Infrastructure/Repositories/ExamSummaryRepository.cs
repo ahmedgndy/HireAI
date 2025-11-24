@@ -8,6 +8,6 @@ namespace HireAI.Infrastructure.Repositories
 {
     public class ExamSummaryRepository : GenericRepositoryAsync<ExamSummary>, IExamSummaryRepository
     {
-        public ExamSummaryRepository(HireAIDbContext db) : base(db) { }
+        public ExamSummaryRepository(HireAIDbContext db) : base(db) {  }
     }
 }

@@ -8,6 +8,9 @@ namespace HireAI.Infrastructure.Repositories
 {
     public class ExamEvaluationRepository : GenericRepositoryAsync<ExamEvaluation>, IExamEvaluationRepository
     {
-        public ExamEvaluationRepository(HireAIDbContext db) : base(db) { }
+        public ExamEvaluationRepository(HireAIDbContext db) : base(db) { 
+        
+            
+        }
     }
 }

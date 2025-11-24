@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HireAI.Service.Interfaces
 {
-    interface IHrDashboardService
+    public interface IHrDashboardService
     {
 
         public Task<HRDashboardDto> GetDashboardAsync(int hrId);
