@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace HireAI.Service.Implementions
 {
-    internal class HRDashBoardService : IHrDashboardService
+    public class HRDashBoardService : IHrDashboardService
     {
         private readonly IApplicationRepository _applications;
 
