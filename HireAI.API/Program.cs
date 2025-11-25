@@ -1,10 +1,15 @@
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+
+using HireAI.Infrastructure.GenaricBasies;
+
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Infrastructure.Repositories;
 using HireAI.Service.Abstractions;
 using HireAI.Service.Implementation;
+
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
