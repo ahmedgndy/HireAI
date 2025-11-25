@@ -1,5 +1,6 @@
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+
 using HireAI.Infrastructure.GenaricBasies;
 
 using HireAI.Infrastructure.GenericBase;
@@ -70,6 +71,7 @@ namespace HireAI.API
             builder.Services.AddScoped<IApplicantDashboardService, ApplicantDashboardService>();
             builder.Services.AddScoped<ApplicantDashboardService>();
             builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
+            builder.Services.AddScoped<IJopOpenningService, JobOpeningService>();
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IHrDashboardService, HRDashBoardService>(); 
             #endregion

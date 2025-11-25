@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
-using HireAI.Data.Models;
 using HireAI.Data.DTOs;
 using HireAI.Data.DTOs.ApplicantDashboard;
+using HireAI.Data.Helpers.DTOs.JopOpening.Request;
+using HireAI.Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,9 @@ namespace HireAI.Infrastructure.Mappings
               .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.ApplicationStatus));
 
             CreateMap<JobOpening, JobOpeningDTO>();
+
+            CreateMap<JopOpeingRequestDto, JobOpening>();
+
         }
     }
 }

@@ -9,7 +9,10 @@ namespace HireAI.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<ExamEvaluation> builder)
         {
-            builder.HasKey(ee => ee.Id);
+            builder.Property(a => a.Id)
+               .ValueGeneratedOnAdd();
+
+
 
             // Foreign Keys
             builder.HasOne(ee => ee.ExamSummary)

@@ -9,7 +9,8 @@ namespace HireAI.Data.Configurations
         public void Configure(EntityTypeBuilder<Answer> builder)
         {
             builder.Property(a => a.Id)
-                              .ValueGeneratedOnAdd();
+                           .ValueGeneratedOnAdd();
+
             builder.Property(a => a.Text)
                 .HasColumnType("varchar(100)");
 
@@ -24,6 +25,7 @@ namespace HireAI.Data.Configurations
                 .HasForeignKey(a => a.QuestionId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+     
             builder.HasIndex(a => a.QuestionId);
 
             // Index for quick lookup of correct answers
