@@ -2,7 +2,7 @@
 using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intefaces;
 using HireAI.Infrastructure.Repositories;
 using HireAI.Service.Abstractions;
 using HireAI.Service.DTOs;

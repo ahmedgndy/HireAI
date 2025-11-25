@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using HireAI.Infrastructure.Context;
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intefaces;
 using HireAI.Service.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;

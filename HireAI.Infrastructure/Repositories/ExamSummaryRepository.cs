@@ -1,7 +1,7 @@
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.GenaricBasies;
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intefaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace HireAI.Infrastructure.Repositories
