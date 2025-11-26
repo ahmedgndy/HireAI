@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAI.Data.Helpers.DTOs.ExamDTOS.Respones
+namespace  HireAI.Data.Helpers.DTOs.ExamDTOS.Respones
 {
-    public class AnswerDTO
+    public class AnswerResponseDTO
     {
         public int Id { get; set; }
         public string Text { get; set; } = default!;

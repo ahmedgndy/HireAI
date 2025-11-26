@@ -1,4 +1,5 @@
-﻿using HireAI.Service.Interfaces;
+﻿using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
+using HireAI.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HireAI.API.Controllers
@@ -26,6 +27,13 @@ namespace HireAI.API.Controllers
         {
             var examsDTO = await _examService.GetExamsTakenByApplicant(applicantId, pageNumber, pageSize);
             return Ok(examsDTO);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateExam([FromBody] ExamRequestDTO examRequestDTO)
+        {
+            await _examService.CreateExamAsync(examRequestDTO);
+            return Ok();
         }
     }
 }

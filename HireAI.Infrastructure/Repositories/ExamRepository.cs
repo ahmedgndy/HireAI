@@ -10,6 +10,8 @@ namespace HireAI.Infrastructure.Repositories
     {
         public ExamRepository(HireAIDbContext db) : base(db) { }
 
+       
+
         //Get Exam by Applicant Id with Questions and Answers
         public async Task<Exam?> GetExamByApplicanIdAsync(int id)
         {
@@ -28,6 +30,13 @@ namespace HireAI.Infrastructure.Repositories
                                .Skip(pageSize * (pageNumber - 1))
                                .Take(pageSize)
                                .Where(e => e.ApplicantId == applicantId).ToListAsync();                
+        }
+
+        public async Task CreateExamAsncy(Exam exam)
+        {
+            await _dbSet.AddAsync(exam);
+            await _context.SaveChangesAsync();
+            
         }
     }
 }

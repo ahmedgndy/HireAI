@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using HireAI.Data.DTOs;
 using HireAI.Data.DTOs.ApplicantDashboard;
+using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
+using HireAI.Data.Helpers.DTOs.ExamResponseDTOS.Request;
 using HireAI.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -22,13 +24,15 @@ namespace HireAI.Infrastructure.Mappings
               .ForMember(dest => dest.AtsScore, opt => opt.MapFrom(src => src.AtsScore))
               .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.ApplicationStatus));
 
-            CreateMap<Exam, ExamDTO>();
+            CreateMap<Exam, ExamResponseDTO>();
+            CreateMap<Question, QuestionResponseDTO>();
+            CreateMap<Answer, AnswerResponseDTO>();
 
-            // If Exam has Questions and Question -> QuestionDTO
-            CreateMap<Question, QuestionDTO>();
 
-            // And Answers
-            CreateMap<Answer, AnswerDTO>();
+            CreateMap< ExamRequestDTO , Exam>();
+            CreateMap< QuestionRequestDTO , Question>();
+            CreateMap<AnswerRequestDTO, Answer>();
+
 
             CreateMap<JobOpening, JobOpeningDTO>();
         }

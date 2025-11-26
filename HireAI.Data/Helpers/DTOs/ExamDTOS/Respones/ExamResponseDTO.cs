@@ -4,7 +4,7 @@ using HireAI.Data.Helpers.Enums;
 
 namespace HireAI.Data.Helpers.DTOs.ExamDTOS.Respones
 {
-    public class ExamDTO
+    public class ExamResponseDTO
     {
         public int Id { get; set; }
         public int NumberOfQuestions { get; set; }
@@ -15,11 +15,10 @@ namespace HireAI.Data.Helpers.DTOs.ExamDTOS.Respones
         public enExamType ExamType { get; set; } = enExamType.MockExam;
 
         public int? ApplicantId { get; set; }
-        public int? ApplicationId { get; set; }
+        public int? ApplicationIdh { get; set; }
 
-        public List<QuestionDTO> Questions { get; set; } = new List<QuestionDTO>();
+        public List<QuestionResponseDTO> Questions { get; set; } = new List<QuestionResponseDTO>();
     }
 
   
-
 }

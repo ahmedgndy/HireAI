@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.GenericBase;
@@ -22,21 +23,27 @@ namespace HireAI.Service.Implementation
             _mapper = mapper;
         }
 
-        public async Task<ExamDTO?> GetExamByApplicantIdAsync(int applicantId)
+        public async Task CreateExamAsync(ExamRequestDTO examRequesDTO)
+        {
+            var exam = _mapper.Map<Exam>(examRequesDTO);
+            await _examRepository.CreateExamAsncy(exam);
+        }
+
+        public async Task<ExamResponseDTO?> GetExamByApplicantIdAsync(int applicantId)
         {
             var exam = await _examRepository.GetExamByApplicanIdAsync(applicantId);
             if (exam == null) return null;
-            var examDTO = _mapper.Map<ExamDTO>(exam);
+            var examDTO = _mapper.Map<ExamResponseDTO>(exam);
             Console.WriteLine(examDTO.ExamName);
 
             return examDTO;
         }
 
-        public async Task<ICollection<ExamDTO>> GetExamsTakenByApplicant(int aplicantId ,int pageNumber =1 , int pageSize=5)
+        public async Task<ICollection<ExamResponseDTO>> GetExamsTakenByApplicant(int aplicantId ,int pageNumber =1 , int pageSize=5)
         {
             var exams = await _examRepository.GetExamsByApplicantIdAsync(aplicantId, pageNumber ,pageSize) ?? new List<Exam>();
         
-            return   exams.Select(e => _mapper.Map<ExamDTO>(e)).ToList();
+            return   exams.Select(e => _mapper.Map<ExamResponseDTO>(e)).ToList();
 
         }
 
