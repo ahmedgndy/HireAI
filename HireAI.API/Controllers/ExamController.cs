@@ -13,6 +13,8 @@ namespace HireAI.API.Controllers
             _examService = examService;
         }
 
+
+        
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetExamByApplicantId(int id)
         {
@@ -33,6 +35,19 @@ namespace HireAI.API.Controllers
         public async Task<IActionResult> CreateExam([FromBody] ExamRequestDTO examRequestDTO)
         {
             await _examService.CreateExamAsync(examRequestDTO);
+            return Ok();
+        }
+
+        [HttpPost("question")]
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionRequestDTO questionRequestDTO)
+        {
+            await _examService.CreateQuestionAsync(questionRequestDTO);
+            return Ok();
+        }
+        [HttpDelete("{examId:int}")]
+        public async Task<IActionResult> DeleteExam(int examId)
+        {
+            await _examService.DeleteExamAsync(examId);
             return Ok();
         }
     }

@@ -18,7 +18,7 @@ namespace HireAI.Data.Helpers.DTOs.ExamDTOS.Request
 
         public enQuestionAnswers? Answer { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Question number must be at least 1.")]
+        [Range(1, 40, ErrorMessage = "Question number must be at least 1.")]
         public int QuestionNumber { get; set; }
 
         [MinLength(1, ErrorMessage = "Each question must have at least one answer option.")]

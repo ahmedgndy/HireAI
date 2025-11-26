@@ -16,10 +16,12 @@ namespace HireAI.Service.Implementation
     {
 
         private readonly IExamRepository _examRepository;
+        private readonly IQuestionRepository _questionRepository;   
         private readonly IMapper _mapper;
-        public ExamService(IExamRepository examRepository, IMapper mapper)
+        public ExamService(IExamRepository examRepository,IQuestionRepository questionRepository,  IMapper mapper)
         {
             _examRepository = examRepository;
+            _questionRepository = questionRepository;
             _mapper = mapper;
         }
 
@@ -27,6 +29,20 @@ namespace HireAI.Service.Implementation
         {
             var exam = _mapper.Map<Exam>(examRequesDTO);
             await _examRepository.CreateExamAsncy(exam);
+        }
+
+        public Task CreateQuestionAsync(QuestionRequestDTO questionRequest)
+        {
+           var question = _mapper.Map<Question>(questionRequest);
+            return _questionRepository.AddAsync(question);
+        }
+
+        public async Task DeleteExamAsync(int examId)
+        {
+            var exam =  await _examRepository.GetByIdAsync(examId);
+            if (exam == null) throw new Exception("Exam not found");
+
+            await _examRepository.DeleteAsync(exam);
         }
 
         public async Task<ExamResponseDTO?> GetExamByApplicantIdAsync(int applicantId)

@@ -28,7 +28,7 @@ namespace HireAI.Data.Configurations
             builder.HasOne(q => q.Exam)
                 .WithMany(e => e.Questions)
                 .HasForeignKey(q => q.ExamId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(q => q.ApplicantResponse)
                 .WithOne(ar => ar.Question)

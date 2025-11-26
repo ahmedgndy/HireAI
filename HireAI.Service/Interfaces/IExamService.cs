@@ -16,6 +16,9 @@ namespace HireAI.Service.Interfaces
 
         public Task CreateExamAsync(ExamRequestDTO examRequesDTO);
 
-       
+        public Task CreateQuestionAsync(QuestionRequestDTO questionRequest);
+
+        public Task DeleteExamAsync(int examId);
+
     }
 }
