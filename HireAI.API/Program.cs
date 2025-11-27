@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HireAI.Service.Interfaces;
 
+
+
 namespace HireAI.API
 {
     public class Program
@@ -72,11 +74,18 @@ namespace HireAI.API
             builder.Services.AddScoped<ApplicantDashboardService>();
             builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+
             builder.Services.AddScoped<IHRService, HRService>();
             builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 
             builder.Services.AddScoped<IHRRepository, HRRepository>();
             builder.Services.AddScoped<IExamService, ExamService>();
+
+
+
+            builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
+            builder.Services.AddScoped<IJopOpenningService, JobOpeningService>();
+
             #endregion
 
             #region Add AutoMapper service

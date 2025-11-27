@@ -92,8 +92,7 @@ namespace HireAI.Service.Implementation
         {
             var query =  _applications.GetAll(); 
             var filtered = query.Where(a => a.HRId == hrId && a.ExamStatus == enExamStatus.completed); 
-             return await filtered.CountAsync(); 
-           
+            return await filtered.CountAsync(); 
         }
 
         private async Task<int> GetTotalTopCandidatesAsync(int hrId)
@@ -109,7 +108,7 @@ namespace HireAI.Service.Implementation
                 .Where(a => a.HRId == hrId && a.DateApplied > DateTime.UtcNow.AddYears(-1))
                 .GroupBy(a => a.DateApplied.Month)
                 .Select(g => new { Month = g.Key, Count = g.Count() })
-               .ToDictionaryAsync(x => x.Month, x => x.Count);
+                .ToDictionaryAsync(x => x.Month, x => x.Count);
         }
 
         private async Task<Dictionary<int, int>> GetMonthlyOfTotalATSPassedAsync(int hrId)
