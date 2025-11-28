@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Helpers\DTOs\Applicant\" />
+    <Folder Include="Helpers\DTOs\NewFolder\" />
   </ItemGroup>
 
 

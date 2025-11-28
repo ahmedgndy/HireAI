@@ -13,6 +13,9 @@ namespace HireAI.Service.Interfaces
     {
         Task<HRDashboardDto> GetDashboardAsync(int hrId);
         Task<HRResponseDto> GetHRAsync(int hrId);
+        public Task DeleteHRAsync(int hrId);
+        public Task<HRResponseDto> CreateHRAsync(HRCreateDto hrCreateDto);
+        public  Task<HRResponseDto> UpdateHRAsync(int hrId, HRUpdateDto hrUpdateDto);
 
         // Individual dashboard metric endpoints
         Task<int> GetTotalApplicantsAsync(int hrId);

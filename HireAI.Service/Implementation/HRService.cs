@@ -1,4 +1,5 @@
-﻿using HireAI.Data.Helpers.DTOs.HRDTOS;
+﻿using AutoMapper;
+using HireAI.Data.Helpers.DTOs.HRDTOS;
 using HireAI.Data.Helpers.DTOs.Respones;
 using HireAI.Data.Helpers.DTOs.Respones.HRDashboardDto;
 using HireAI.Data.Helpers.Enums;
@@ -25,14 +26,62 @@ namespace HireAI.Service.Implementation
         private readonly IApplicationRepository _applications;
         private readonly IJobOpeningRepository _jobOpening;
         private readonly IHRRepository _hr;
+        private readonly IMapper _map;
 
         public HRService(IJobOpeningRepository jobOpeningRepository,
                          IApplicationRepository applications,
-                         IHRRepository hr)
+                         IHRRepository hr , IMapper mapper)
         {
             _applications = applications;
             _jobOpening = jobOpeningRepository;
             _hr = hr;
+            _map = mapper;
+        }
+        //Crud Operation for HR
+        public async Task<HRResponseDto> GetHRAsync(int hrId)
+        {
+            var hr = await _hr.GetAll()
+                .Where(h => h.Id == hrId)
+                .FirstOrDefaultAsync();
+
+            if (hr == null)
+            {
+                throw new Exception($"HR with ID {hrId} not found.");
+            }
+
+            var hrResponse = _map.Map<HRResponseDto>(hr);
+            return hrResponse;
+        }
+
+  
+        public async Task DeleteHRAsync(int hrId)
+        {
+            var hr = await _hr.GetByIdAsync(hrId);
+            if (hr == null)
+            {
+                throw new Exception($"HR with ID {hrId} not found.");
+            }
+            await _hr.DeleteAsync(hr);
+        }
+        public async Task<HRResponseDto> UpdateHRAsync(int hrId, HRUpdateDto hrUpdateDto)
+        {
+            var hr = await _hr.GetByIdAsync(hrId);
+            if (hr == null)
+            {
+                throw new Exception($"HR with ID {hrId} not found.");
+            }
+            _map.Map(hrUpdateDto, hr);
+            await _hr.UpdateAsync(hr);
+            var hrResponse = _map.Map<HRResponseDto>(hr);
+            return hrResponse;
+        }
+
+        public async Task<HRResponseDto> CreateHRAsync(HRCreateDto hrCreateDto)
+        {
+            var hr = _map.Map<HR>(hrCreateDto);
+            await _hr.AddAsync(hr);
+            var hrResponse = _map.Map<HRResponseDto>(hr);
+            return hrResponse;
         }
 
         public async Task<HRDashboardDto> GetDashboardAsync(int hrId)
@@ -58,7 +107,8 @@ namespace HireAI.Service.Implementation
 
         public async Task<int> GetTotalExamTakenAsync(int hrId)
         {
-            return await _applications.GetAll()
+
+            return  await _applications.GetAll()
                 .Where(a => a.HRId == hrId && a.ExamStatus == enExamStatus.completed)
                 .CountAsync();
         }
@@ -129,10 +179,7 @@ namespace HireAI.Service.Implementation
                 .ToListAsync();
         }
 
-        public Task<HRResponseDto> GetHRAsync(int hrId)
-        {
-            throw new NotImplementedException();
-        }
+      
     }
 
 

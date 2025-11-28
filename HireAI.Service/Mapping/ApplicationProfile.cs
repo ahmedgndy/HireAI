@@ -5,7 +5,7 @@ using HireAI.Data.DTOs.ApplicantDashboard;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
 using HireAI.Data.Helpers.DTOs.ExamResponseDTOS.Request;
-
+using HireAI.Data.Helpers.DTOs.HRDTOS;
 using HireAI.Data.Helpers.DTOs.JopOpening.Request;
 using HireAI.Data.Helpers.DTOs.JopOpening.ResonsetDto;
 using HireAI.Data.Models;
@@ -50,6 +50,12 @@ namespace HireAI.Infrastructure.Mappings
 
             // Optional: if you have other DTOs
             CreateMap<JobOpening, JobOpeningDTO>();
+
+            //map hr 
+
+            CreateMap<HR , HRResponseDto>();
+       
+           CreateMap<HRUpdateDto, HR>();    
         }
     }
 }
