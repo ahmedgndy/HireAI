@@ -204,7 +204,6 @@ namespace HireAI.Seeder
                         ExamId = ex.Id,
                         QuestionText = $"Question {q} for Exam {ex.Id}",
                         QuestionNumber = q,
-                        Answer = enQuestionAnswers.A
                     };
                     questions.Add(question);
                 }
@@ -241,7 +240,6 @@ namespace HireAI.Seeder
                     {
                         ExamSummaryId = s.Id,
                         QuestionId = q.Id,
-                        AnswerNumber = answerNum++
                     });
                 }
             }
@@ -307,7 +305,6 @@ namespace HireAI.Seeder
                         ExamEvaluationId = ev.Id,
                         Feedback = "Reviewed: auto-seed feedback",
                         IsCorrect = rnd.NextDouble() > 0.3,
-                        EvaluatedAt = DateTime.UtcNow
                     };
                     questionEvaluations.Add(qEval);
                 }
