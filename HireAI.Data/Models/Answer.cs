@@ -11,9 +11,10 @@ namespace HireAI.Data.Models
         public int Id { get; set; } 
         public string Text { get; set; } = null!;
         public bool IsCorrect { get; set; } = false;
+        public int CorrectAnswerNumber { get; set; }
 
         //Foreign Keys
-         public int QuestionId { get; set; }
-       public Question Question { get; set; }
+        public int QuestionId { get; set; }
+        public Question? Question { get; set; }
     }
 }

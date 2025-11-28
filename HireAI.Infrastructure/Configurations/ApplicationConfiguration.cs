@@ -42,6 +42,13 @@ namespace HireAI.Data.Configurations
              v => (enApplicationStatus)Enum.Parse(typeof(enApplicationStatus), v)// Converts the string back to enum when reading from the database
               );
 
+            builder.Property(a => a.ExamStatus)
+            .HasConversion(
+              v => v.ToString(),// Converts the enum to string when saving to the database                  
+             v => (enExamStatus)Enum.Parse(typeof(enExamStatus), v)// Converts the string back to enum when reading from the database
+              )
+            .HasDefaultValue(enExamStatus.notTaken);
+
             // Indexes
             builder.HasIndex(a => a.HRId);
             builder.HasIndex(a => a.ApplicantId);

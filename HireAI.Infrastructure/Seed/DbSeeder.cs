@@ -156,21 +156,21 @@ namespace HireAI.Seeder
             var answers = new List<Answer>();
             var applicantResponses = new List<ApplicantResponse>();
 
-            int examCounter = 0;
+            //int examCounter = 0;
             foreach (var appItem in applications.Where(a => a.ExamStatus == enExamStatus.completed))
             {
-                examCounter++;
-                var exam = new Exam
-                {
-                    ApplicantId = appItem.ApplicantId,
-                    ApplicationId = appItem.Id,
-                    ExamName = $"Coding Test #{examCounter}",
-                    NumberOfQuestions = job.NumberOfQuestions ?? 5,
-                    DurationInMinutes = job.ExamDurationMinutes ?? 30,
-                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 90)),
-                    IsAi = true
-                };
-                exams.Add(exam);
+                //examCounter++;
+                //var exam = new Exam
+                //{
+                //    ApplicantId = appItem.ApplicantId,
+                //    ApplicationId = appItem.Id,
+                //    ExamName = $"Coding Test #{examCounter}",
+                //    NumberOfQuestions = job.NumberOfQuestions ?? 5,
+                //    DurationInMinutes = job.ExamDurationMinutes ?? 30,
+                //    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 90)),
+                //    IsAi = true
+                //};
+                //exams.Add(exam);
             }
             context.Exams.AddRange(exams);
             await context.SaveChangesAsync();

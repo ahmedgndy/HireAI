@@ -29,7 +29,7 @@ namespace HireAI.Data.Models
         public ExamSummary? ExamSummary { get; set; }
 
         //add this exam status
-        public enExamStatus? ExamStatus { get; set; }
+        public enExamStatus ExamStatus { get; set; } = enExamStatus.notTaken;
 
 
     }

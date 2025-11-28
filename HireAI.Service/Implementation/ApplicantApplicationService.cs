@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
-using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.Intrefaces;
 using HireAI.Data.DTOs.ApplicantDashboard;
 using Microsoft.EntityFrameworkCore;
+using HireAI.Data.Helpers.DTOs.ApplicantApplication;
+using HireAI.Service.Interfaces;
 
 namespace HireAI.Service.Implementation
 {
-    public class ApplicantApplicationService
+    public class ApplicantApplicationService : IApplicantApplicationService
     {
         private readonly IApplicationRepository _applicationRepository;
         private readonly IMapper _mapper;
@@ -26,6 +27,24 @@ namespace HireAI.Service.Implementation
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ApplicantApplicationsListDto>>(ApplicationsList);
+        }
+
+        public async Task<ApplicationDetailsDto> GetApplicationDetailsAsync(int applicationId, int applicantId)
+        {
+            var application = await _applicationRepository.GetAll()
+                .AsNoTracking()
+                .Include(a => a.AppliedJob)
+                .Include(a => a.ExamSummary)
+                .ThenInclude(e => e.ExamEvaluation)
+                .Where(a => a.Id == applicationId && a.ApplicantId == applicantId)
+                .FirstOrDefaultAsync();
+
+            if (application == null)
+            {
+                throw new KeyNotFoundException("Application not found.");
+            }
+
+            return _mapper.Map<ApplicationDetailsDto>(application);
         }
     }
 }

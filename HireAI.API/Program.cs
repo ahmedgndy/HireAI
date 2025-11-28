@@ -55,6 +55,8 @@ namespace HireAI.API
             })
                 .AddEntityFrameworkStores<HireAIDbContext>()
                 .AddDefaultTokenProviders();
+
+            //Register Services in the DI Container
             builder.Services.AddScoped<IJobOpeningRepository,JobOpeningRepository>();
             builder.Services.AddScoped<IApplicantJobOpeningService,ApplicantJobOpeningService>();
 
@@ -65,6 +67,11 @@ namespace HireAI.API
             builder.Services.AddScoped<IApplicantSkillRepository, ApplicantSkillRepository>();
             builder.Services.AddScoped<IApplicantDashboardService, ApplicantDashboardService>();
             builder.Services.AddScoped<ApplicantDashboardService>();
+            builder.Services.AddScoped<IApplicantApplicationService, ApplicantApplicationService>();
+            builder.Services.AddScoped<ApplicantApplicationService>();
+            builder.Services.AddScoped<IMockExamService, MockExamService>();
+            builder.Services.AddScoped<MockExamService>();
+
             builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IHrDashboardService, HRDashBoardService>(); 
@@ -77,6 +84,8 @@ namespace HireAI.API
 
             var app = builder.Build();
 
+            #region Seeding the Database
+            // Apply migrations and seed the database
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -112,8 +121,9 @@ namespace HireAI.API
                     // throw;
                 }
             }
+            #endregion
 
-            
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

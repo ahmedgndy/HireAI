@@ -11,10 +11,12 @@ namespace HireAI.Data.Models
     public class Exam
     {
         public int Id { get; set; }
+        public string ExamName { get; set; } = default!;
+        public string ExamDescription { get; set; } = default!;
+        public enExamLevel ExamLevel { get; set; } = enExamLevel.Beginner;
         public int NumberOfQuestions { get; set; }
         public int DurationInMinutes { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string ExamName { get; set; } = default!;
         public bool IsAi { get; set; } = true;
         public enExamType ExamType { get; set; } = enExamType.MockExam;
 
