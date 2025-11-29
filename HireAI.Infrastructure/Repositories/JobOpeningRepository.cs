@@ -14,6 +14,8 @@ namespace HireAI.Infrastructure.Repositories
         {
             return await _dbSet
                            .Where(jo => jo.HRId == hrid)
+                           .Include(jp => jp.JobSkills)
+                           .ThenInclude(js => js.Skill)
                            .ToListAsync();
         }
 
@@ -25,5 +27,7 @@ namespace HireAI.Infrastructure.Repositories
                     .FirstOrDefaultAsync(jp => jp.Id == id);
 
         }
+
+       
     }
 }

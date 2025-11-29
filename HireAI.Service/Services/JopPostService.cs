@@ -58,6 +58,12 @@ namespace HireAI.Service.Implementation
             {
                 throw new Exception("Job Opening not found");
             }
+            //delete associated skills  
+            foreach ( var jobSkill in jobOpeningEntity.JobSkills)
+            {
+                await _jobSkillRepository.DeleteAsync(jobSkill);
+            }
+            //delete job post
             await _jobPostRepository.DeleteAsync(jobOpeningEntity);
         }
 
@@ -86,17 +92,60 @@ namespace HireAI.Service.Implementation
             return _mapper.Map<ICollection<JobPostResponseDto>>(jobOpenings);
         }
 
-        public async Task UpdateJobPostAsync(int id, JobPostRequestDto jopOpeingRequestDto)
+        public async Task UpdateJobPostAsync(int id, JobPostRequestDto jobPostRequestDto)
         {
-            var existingEntity = await _jobPostRepository.GetByIdAsync(id);
+            if(jobPostRequestDto == null)
+            {
+                throw new ArgumentException(nameof(JobPostRequestDto));
+            }
 
-            if (existingEntity == null)
+            if (jobPostRequestDto.SkillIds == null || !jobPostRequestDto.SkillIds.Any()) {
+
+                jobPostRequestDto.SkillIds = new List<int>();
+                    }
+
+            var existing = await _jobPostRepository.GetByIdAsync(id);
+
+            if (existing == null)
                 throw new Exception("Job Opening not found");
 
 
-            _mapper.Map(jopOpeingRequestDto, existingEntity);
+            _mapper.Map(jobPostRequestDto, existing);
 
-            await _jobPostRepository.UpdateAsync(existingEntity);
+            //compute what to add adn what to remove
+             var currentSkillIds = existing.JobSkills.Select(js => js.SkillId).ToList();
+             var newSkillIds = jobPostRequestDto.SkillIds.ToList();
+
+            var toAdd = newSkillIds.Except(currentSkillIds).ToList();
+            var toRemove = currentSkillIds.Except(newSkillIds).ToList();    
+
+            if (toAdd.Any())
+            {
+                foreach (var skillId in toAdd)
+                {
+                    var jobSkillEntity = new JobSkill
+                    {
+                        JobId = existing.Id,
+                        SkillId = skillId
+                    };
+                    await _jobSkillRepository.AddAsync(jobSkillEntity);
+                }
+            }
+            //to remove
+            if (toRemove.Any())
+            {
+                foreach (var skillId in toRemove)
+                {
+                    var jobSkillEntity = existing.JobSkills.FirstOrDefault(js => js.SkillId == skillId);
+                    if (jobSkillEntity != null)
+                    {
+                        await _jobSkillRepository.DeleteAsync(jobSkillEntity);
+                    }
+                }
+            }
+            //update job post
+            await  _jobPostRepository.UpdateAsync(existing);
+
         }
     }
 }

@@ -26,6 +26,7 @@ namespace HireAI.Data.Helpers.DTOs.JopOpening.Request
         public enJobStatus? JobStatus { get; set; } = enJobStatus.Active;
 
         // in minutes
+        [Range(10, 40, ErrorMessage = "Exam duration must be between 10 and 40 minutes.")]
         public int? ExamDurationMinutes { get; set; }
 
         public enExperienceLevel? ExperienceLevel { get; set; }
@@ -38,6 +39,7 @@ namespace HireAI.Data.Helpers.DTOs.JopOpening.Request
         [MaxLength(50)]
         public string? SalaryRange { get; set; }
 
+        [Range(10, 40, ErrorMessage = "Exam fQuestions must be between 10 and 60 minutes.")]
         public int? NumberOfQuestions { get; set; }
 
         public DateTime? ApplicationDeadline { get; set; }
