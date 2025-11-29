@@ -1,3 +1,4 @@
+using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Intrefaces;
 using HireAI.Infrastructure.Repositories;
 
