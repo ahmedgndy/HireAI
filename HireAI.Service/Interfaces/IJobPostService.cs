@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HireAI.Service.Interfaces
 {
-    public interface IJopService
+    public interface IJobPostService
     {
         public Task<JobPostResponseDto> GetJobPostAsync(int id);
         public Task CreateJobPostAsync(JobPostRequestDto jopOpeingRequestDto);

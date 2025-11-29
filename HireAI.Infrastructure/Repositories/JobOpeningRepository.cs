@@ -16,5 +16,14 @@ namespace HireAI.Infrastructure.Repositories
                            .Where(jo => jo.HRId == hrid)
                            .ToListAsync();
         }
+
+        public override Task<JobPost?> GetByIdAsync(int id)
+        {
+            return _dbSet
+                    .Include(jp => jp.JobSkills)
+                    .ThenInclude(js => js.Skill)
+                    .FirstOrDefaultAsync(jp => jp.Id == id);
+
+        }
     }
 }

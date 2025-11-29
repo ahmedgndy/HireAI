@@ -8,12 +8,19 @@ namespace HireAI.API.Controllers
     [ApiController]
     public class JopController : ControllerBase
     {
-        private readonly IJopService _jopPostService;
-        public JopController(IJopService jobPostService)
+        private readonly IJobPostService _jopPostService;
+        public JopController(IJobPostService jobPostService)
         {
 
             _jopPostService = jobPostService;
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetJopOppenAsny(int id)
+        {
+            var result = await _jopPostService.GetJobPostAsync(id);
+            return Ok(result);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddJopOppenAsny([FromBody] JobPostRequestDto jopOpeingRequestDto)
         {

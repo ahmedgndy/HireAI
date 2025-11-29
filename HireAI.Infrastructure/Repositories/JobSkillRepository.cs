@@ -9,5 +9,12 @@ namespace HireAI.Infrastructure.Repositories
     public class JobSkillRepository : GenericRepositoryAsync<JobSkill>, IJobSkillRepository
     {
         public JobSkillRepository(HireAIDbContext db) : base(db) { }
+
+        public async Task<ICollection<JobSkill>> GetSkillsByJobIdAsync(int jobId)
+        {
+            return await GetAll()
+                .Where(js => js.JobId == jobId)
+                .ToListAsync();
+        }
     }
 }

@@ -3,5 +3,7 @@ using HireAI.Infrastructure.GenaricBasies;
 
 namespace HireAI.Infrastructure.GenericBase
 {
-    public interface IJobSkillRepository : IGenericRepositoryAsync<JobSkill> { }
+    public interface IJobSkillRepository : IGenericRepositoryAsync<JobSkill> {  
+      public Task<ICollection<JobSkill>> GetSkillsByJobIdAsync(int jobId);
+    }
 }

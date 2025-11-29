@@ -7,6 +7,7 @@ using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
 using HireAI.Data.Helpers.DTOs.ExamResponseDTOS.Request;
 using HireAI.Data.Helpers.DTOs.HRDTOS;
 using HireAI.Data.Helpers.DTOs.JopOpening.Request;
+using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
 using HireAI.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,12 @@ namespace HireAI.Infrastructure.Mappings
         
             CreateMap<HRCreateDto, HR>();
 
-
+            CreateMap<JobPost, JobPostResponseDto>()
+                // Usually AutoMapper will map the collection automatically when types match,
+                // but you can be explicit:
+                .ForMember(dest => dest.Skills, opt => opt.MapFrom(src => src.JobSkills));
         }
     }
-}
+    }
+    
+
