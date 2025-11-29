@@ -11,19 +11,10 @@ namespace HireAI.Service.Interfaces
 {
     public interface IHRService
     {
-        Task<HRDashboardDto> GetDashboardAsync(int hrId);
         Task<HRResponseDto> GetHRAsync(int hrId);
         public Task DeleteHRAsync(int hrId);
         public Task<HRResponseDto> CreateHRAsync(HRCreateDto hrCreateDto);
         public  Task<HRResponseDto> UpdateHRAsync(int hrId, HRUpdateDto hrUpdateDto);
 
-        // Individual dashboard metric endpoints
-        Task<int> GetTotalApplicantsAsync(int hrId);
-        Task<int> GetTotalExamTakenAsync(int hrId);
-        Task<int> GetTotalTopCandidatesAsync(int hrId);
-        Task<Dictionary<int, int>> GetMonthlyNumberOfApplicationsAsync(int hrId);
-        Task<Dictionary<int, int>> GetMonthlyOfTotalATSPassedAsync(int hrId);
-        Task<List<RecentApplicationDto>> GetRecentApplicantsAsync(int hrId, int take = 5);
-        Task<List<ActiveJopPosting>> GetActiveJobPostingsAsync(int hrId);
     }
 }

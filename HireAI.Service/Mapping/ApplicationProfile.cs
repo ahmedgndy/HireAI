@@ -55,7 +55,11 @@ namespace HireAI.Infrastructure.Mappings
 
             CreateMap<HR , HRResponseDto>();
        
-           CreateMap<HRUpdateDto, HR>();    
+           CreateMap<HRUpdateDto, HR>();
+        
+            CreateMap<HRCreateDto, HR>();
+
+
         }
     }
 }

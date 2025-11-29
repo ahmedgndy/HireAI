@@ -16,12 +16,6 @@ namespace HireAI.API.Controllers
             _hrService = hrService;
         }
 
-        [HttpGet("dashboard/{hrId:int}")]
-        public async Task<IActionResult> GetHRDashBoardAsync(int hrId)
-        {
-            return Ok(await _hrService.GetDashboardAsync(hrId));
-        }
-
         //get hr details
         [HttpGet("{hrId:int}")]
         public async Task<IActionResult> GetHRAsync(int hrId)
@@ -29,7 +23,7 @@ namespace HireAI.API.Controllers
             return Ok(await _hrService.GetHRAsync(hrId));
         }
         [HttpPut("{hrId:int}")]
-        public async Task<IActionResult> UpdateHRAsync(int hrId, HRUpdateDto hrUpdateDto)
+        public async Task<IActionResult> UpdateHRAsync(int hrId,[FromBody] HRUpdateDto hrUpdateDto)
         {
             await _hrService.UpdateHRAsync(hrId, hrUpdateDto);
             return Ok();
@@ -42,37 +36,12 @@ namespace HireAI.API.Controllers
             return Ok();
         }
 
-        // -------------------------------
-        // Individual metric endpoints
-        // -------------------------------
-
-        [HttpGet("{hrId:int}/total-applicants")]
-        public async Task<IActionResult> GetTotalApplicants(int hrId)
-            => Ok(await _hrService.GetTotalApplicantsAsync(hrId));
-
-        [HttpGet("{hrId:int}/exam-taken")]
-        public async Task<IActionResult> GetTotalExamTaken(int hrId)
-            => Ok(await _hrService.GetTotalExamTakenAsync(hrId));
-
-        [HttpGet("{hrId:int}/top-candidates")]
-        public async Task<IActionResult> GetTotalTopCandidates(int hrId)
-            => Ok(await _hrService.GetTotalTopCandidatesAsync(hrId));
-
-        [HttpGet("{hrId:int}/monthly-applicants")]
-        public async Task<IActionResult> GetMonthlyApplicants(int hrId)
-            => Ok(await _hrService.GetMonthlyNumberOfApplicationsAsync(hrId));
-
-        [HttpGet("{hrId:int}/ats-passed-monthly")]
-        public async Task<IActionResult> GetMonthlyATSPassed(int hrId)
-            => Ok(await _hrService.GetMonthlyOfTotalATSPassedAsync(hrId));
-
-        [HttpGet("{hrId:int}/recent-applications")]
-        public async Task<IActionResult> GetRecentApplications(int hrId)
-            => Ok(await _hrService.GetRecentApplicantsAsync(hrId));
-
-        [HttpGet("{hrId:int}/active-jobs")]
-        public async Task<IActionResult> GetActiveJobs(int hrId)
-            => Ok(await _hrService.GetActiveJobPostingsAsync(hrId));
+        [HttpPost]
+        public async Task<IActionResult> CreateHRAsync(HRCreateDto hrCreateDto)
+        {
+            await _hrService.CreateHRAsync(hrCreateDto);
+            return Ok();
+        }   
     }
 
 }

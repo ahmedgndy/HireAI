@@ -81,7 +81,7 @@ namespace HireAI.API
 
             builder.Services.AddScoped<IHRRepository, HRRepository>();
             builder.Services.AddScoped<IExamService, ExamService>();
-
+            builder.Services.AddScoped<IHRDashboardService, HRDashboardService>();
 
 
             builder.Services.AddScoped<IJobOpeningRepository, JobOpeningRepository>();

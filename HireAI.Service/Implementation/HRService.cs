@@ -23,17 +23,12 @@ namespace HireAI.Service.Implementation
 
     public class HRService : IHRService
     {
-        private readonly IApplicationRepository _applications;
-        private readonly IJobOpeningRepository _jobOpening;
+      
         private readonly IHRRepository _hr;
         private readonly IMapper _map;
 
-        public HRService(IJobOpeningRepository jobOpeningRepository,
-                         IApplicationRepository applications,
-                         IHRRepository hr , IMapper mapper)
+        public HRService(IHRRepository hr , IMapper mapper)
         {
-            _applications = applications;
-            _jobOpening = jobOpeningRepository;
             _hr = hr;
             _map = mapper;
         }
@@ -66,117 +61,24 @@ namespace HireAI.Service.Implementation
         public async Task<HRResponseDto> UpdateHRAsync(int hrId, HRUpdateDto hrUpdateDto)
         {
             var hr = await _hr.GetByIdAsync(hrId);
+
             if (hr == null)
             {
                 throw new Exception($"HR with ID {hrId} not found.");
             }
             _map.Map(hrUpdateDto, hr);
             await _hr.UpdateAsync(hr);
-            var hrResponse = _map.Map<HRResponseDto>(hr);
-            return hrResponse;
+
+            return _map.Map<HRResponseDto>(hr);
         }
 
+        
         public async Task<HRResponseDto> CreateHRAsync(HRCreateDto hrCreateDto)
         {
             var hr = _map.Map<HR>(hrCreateDto);
             await _hr.AddAsync(hr);
             var hrResponse = _map.Map<HRResponseDto>(hr);
             return hrResponse;
-        }
-
-        public async Task<HRDashboardDto> GetDashboardAsync(int hrId)
-        {
-            return new HRDashboardDto
-            {
-                TotalApplicants = await GetTotalApplicantsAsync(hrId),
-                TotalExamTaken = await GetTotalExamTakenAsync(hrId),
-                TotalTopCandidates = await GetTotalTopCandidatesAsync(hrId),
-                MonthlyApplicants = await GetMonthlyNumberOfApplicationsAsync(hrId),
-                ATSPassedRateMonthly = await GetMonthlyOfTotalATSPassedAsync(hrId),
-                RecentApplications = await GetRecentApplicantsAsync(hrId),
-                ActiveJopPostings = await GetActiveJobPostingsAsync(hrId)
-            };
-        }
-
-        public async Task<int> GetTotalApplicantsAsync(int hrId)
-        {
-            return await _applications.GetAll()
-                .Where(a => a.HRId == hrId)
-                .CountAsync();
-        }
-
-        public async Task<int> GetTotalExamTakenAsync(int hrId)
-        {
-
-            return  await _applications.GetAll()
-                .Where(a => a.HRId == hrId && a.ExamStatus == enExamStatus.completed)
-                .CountAsync();
-        }
-
-        public async Task<int> GetTotalTopCandidatesAsync(int hrId)
-        {
-            return await _applications.GetAll()
-                .Where(a => a.HRId == hrId &&
-                            a.ExamSummary != null &&
-                            a.ExamSummary.TotalScroe >= 80 &&
-                            a.AtsScore >= 80)
-                .CountAsync();
-        }
-
-        public async Task<Dictionary<int, int>> GetMonthlyNumberOfApplicationsAsync(int hrId)
-        {
-            return await _applications.GetAll()
-                .Where(a => a.HRId == hrId &&
-                            a.DateApplied > DateTime.UtcNow.AddYears(-1))
-                .GroupBy(a => a.DateApplied.Month)
-                .Select(g => new { g.Key, Count = g.Count() })
-                .ToDictionaryAsync(x => x.Key, x => x.Count);
-        }
-
-        public async Task<Dictionary<int, int>> GetMonthlyOfTotalATSPassedAsync(int hrId)
-        {
-            return await _applications.GetAll()
-                .Where(a => a.HRId == hrId &&
-                            a.ApplicationStatus == enApplicationStatus.UnderReview)
-                .GroupBy(a => a.DateApplied.Month)
-                .Select(g => new { g.Key, Count = g.Count() })
-                .ToDictionaryAsync(x => x.Key, x => x.Count);
-        }
-
-        public async Task<List<RecentApplicationDto>> GetRecentApplicantsAsync(int hrId, int take = 5)
-        {
-            return await _applications.GetAll()
-                .Where(a => a.HRId == hrId)
-                .Select(a => new RecentApplicationDto
-                {
-                    ApplicantName = a.Applicant.Name,
-                    ApplicantCVlink = a.CVFilePath,
-                    AppliedOn = a.DateApplied,
-                    ATSScore = a.AtsScore ?? 0,
-                    Position = a.AppliedJob.Title,
-                    JobStatus = a.AppliedJob.JobStatus,
-                    ExamResultLink = a.ExamSummary != null
-                                       ? $"/examsummary/{a.ExamSummary.Id}"
-                                       : ""
-                })
-                .OrderByDescending(a => a.AppliedOn)
-                .Take(take)
-                .ToListAsync();
-        }
-
-        public async Task<List<ActiveJopPosting>> GetActiveJobPostingsAsync(int hrId)
-        {
-            return await _jobOpening.GetAll()
-                .Where(j => j.HRId == hrId && j.JobStatus == enJobStatus.Active)
-                .Select(j => new ActiveJopPosting
-                {
-                    JobTitle = j.Title,
-                    ApplicationTotalCount = j.Applications.Count,
-                    JobStatus = j.JobStatus,
-                    TakenExamCount = j.Applications.Count(a => a.ExamStatus == enExamStatus.completed),
-                    JobPostLink = $"/jobopenings/{j.Id}"
-                })
-                .ToListAsync();
         }
 
       
