@@ -2,13 +2,9 @@
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
 using HireAI.Data.Models;
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using HireAI.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace HireAI.Service.Implementation
 {

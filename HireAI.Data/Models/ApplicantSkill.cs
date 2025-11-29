@@ -21,7 +21,5 @@ namespace HireAI.Data.Models
         //Navigation Property
         public Applicant? Applicant { get; set; }
         public Skill? Skill { get; set; }
-        //public virtual ICollection<Skill> Skills { get; set; } = new HashSet<Skill>();
-
     }
 }

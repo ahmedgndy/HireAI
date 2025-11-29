@@ -12,9 +12,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using HireAI.Infrastructure.Intrefaces;
+
 namespace HireAI.Service.Implementation
 {
-    public class HRDashboardService : IHRDashboardService
+    public class HRDashboardService : IHrDashboardService
     {
         private readonly IApplicationRepository _applications;
         private readonly IJobPostRepository _JobPostRepository;

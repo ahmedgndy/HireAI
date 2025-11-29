@@ -11,16 +11,16 @@ namespace HireAI.Data.Models
     {
         public int Id { get; set; }
         public string QuestionText { get; set; } = default!;
-        public enQuestionAnswers? Answer { get; set; }
+        public string[] Choices = new string[4];
         public int QuestionNumber { get; set; }
+        public int CorrectAnswerIndex { get; set; }
 
         //Foreign Keys
-        public int ExamId { get; set; }
-        public int? ApplicantResponseId { get; set; }
+        public int? ExamId { get; set; }
+        public int? QuestionEvaluationId { get; set; }
 
         //Navigation Property
-        public ApplicantResponse? ApplicantResponse { get; set; }
         public Exam? Exam { get; set; }
-        public ICollection<Answer> Answers { get; set; } = new HashSet<Answer>();
+        public QuestionEvaluation? QuestionEvaluation { get; set; }
     }
 }

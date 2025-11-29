@@ -3,6 +3,7 @@ using HireAI.Data.Helpers.DTOs.JopOpening.Request;
 using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using HireAI.Service.Interfaces;
 using System;
 using System.Collections.Generic;

@@ -5,6 +5,7 @@ using HireAI.Data.Helpers.DTOs.Respones.HRDashboardDto;
 using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using HireAI.Service.Interfaces;
 using Microsoft.Build.Framework;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

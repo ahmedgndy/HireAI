@@ -36,7 +36,7 @@ namespace HireAI.Data.Configurations
                 .IsUnique();
 
             // Check constraint
-            builder.ToTable(t => t.HasCheckConstraint("CK_ApplicantResponse_Answer", "[AnswerNumber] > 0"));
+            builder.ToTable(t => t.HasCheckConstraint("CK_ApplicantResponse_Answer", "[ApplicantAnswerNumber] > 0"));
         }
     }
 }

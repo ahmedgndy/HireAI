@@ -1,7 +1,7 @@
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.GenaricBasies;
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace HireAI.Infrastructure.Repositories
@@ -17,7 +17,6 @@ namespace HireAI.Infrastructure.Repositories
         {
 
             return await _dbSet.Include(e=>e.Questions)
-                               .ThenInclude(q=> q.Answers)
                                .Where(e => e.ApplicantId == id)
                                .FirstOrDefaultAsync();  
         }
@@ -26,7 +25,6 @@ namespace HireAI.Infrastructure.Repositories
         {
 
             return await _dbSet.Include(e => e.Questions)
-                               .ThenInclude(q => q.Answers)
                                .Skip(pageSize * (pageNumber - 1))
                                .Take(pageSize)
                                .Where(e => e.ApplicantId == applicantId).ToListAsync();                

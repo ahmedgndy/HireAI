@@ -33,7 +33,7 @@ namespace HireAI.Data.Models
 
 
         // Navigation Property
-        public HR HR { get; set; }
+        public HR? HR { get; set; }
         public ICollection<JobSkill> JobSkills { get; set; } = new HashSet<JobSkill>();
         public ICollection<Application> Applications { get; set; } = new HashSet<Application>();
         public ICollection<ExamEvaluation> ExamEvaluations { get; set; } = new HashSet<ExamEvaluation>();

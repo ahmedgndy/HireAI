@@ -33,8 +33,12 @@ namespace HireAI.Data.Configurations
                )
              .HasDefaultValue(enExamType.MockExam);
 
-            // Navigation property
-
+            builder.Property(e => e.ExamLevel)
+             .HasConversion(
+               v => v.ToString(),// Converts the enum to string when saving to the database                  
+              v => (enExamLevel)Enum.Parse(typeof(enExamLevel), v)// Converts the string back to enum when reading from the database
+               )
+             .HasDefaultValue(enExamLevel.Beginner);
 
             // Indexes
             builder.HasIndex(e => e.ApplicantId);

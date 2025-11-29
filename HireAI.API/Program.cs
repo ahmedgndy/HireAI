@@ -1,18 +1,14 @@
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
-
-using HireAI.Infrastructure.GenaricBasies;
-
-using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Infrastructure.Repositories;
 using HireAI.Service.Implementation;
-
 using HireAI.Seeder;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HireAI.Service.Interfaces;
+using HireAI.Infrastructure.GenericBase;
 
 
 
@@ -62,8 +58,11 @@ namespace HireAI.API
             })
                 .AddEntityFrameworkStores<HireAIDbContext>()
                 .AddDefaultTokenProviders();
+
             builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
             builder.Services.AddScoped<IApplicantJobPostService,ApplicantJobPostService>();
+
+
 
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
             builder.Services.AddScoped<IExamRepository, ExamRepository>();
@@ -72,6 +71,13 @@ namespace HireAI.API
             builder.Services.AddScoped<IApplicantSkillRepository, ApplicantSkillRepository>();
             builder.Services.AddScoped<IApplicantDashboardService, ApplicantDashboardService>();
             builder.Services.AddScoped<ApplicantDashboardService>();
+
+            builder.Services.AddScoped<IApplicantApplicationService, ApplicantApplicationService>();
+            builder.Services.AddScoped<ApplicantApplicationService>();
+            builder.Services.AddScoped<IMockExamService, MockExamService>();
+            builder.Services.AddScoped<MockExamService>();
+
+      
             builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 
             builder.Services.AddScoped<IHRService, HRService>();
@@ -79,11 +85,10 @@ namespace HireAI.API
 
             builder.Services.AddScoped<IHRRepository, HRRepository>();
             builder.Services.AddScoped<IExamService, ExamService>();
-            builder.Services.AddScoped<IHRDashboardService, HRDashboardService>();
 
             builder.Services.AddScoped<IJobPostService, JopPostService>();
             builder.Services.AddScoped<IJobSkillRepository, JobSkillRepository>();  
-
+            builder.Services.AddScoped<IHrDashboardService, HRDashboardService>();
             #endregion
 
             #region Add AutoMapper service
@@ -93,6 +98,8 @@ namespace HireAI.API
 
             var app = builder.Build();
 
+            #region Seeding the Database
+            // Apply migrations and seed the database
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -128,8 +135,9 @@ namespace HireAI.API
                     // throw;
                 }
             }
+            #endregion
 
-            
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

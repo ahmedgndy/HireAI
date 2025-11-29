@@ -13,13 +13,12 @@ namespace HireAI.Data.Models
     public class ApplicantResponse
     {
         public int Id { get; set; }
-        
-       
-        public int AnswerNumber { get; set; }
+        public int ApplicantAnswerNumber { get; set; }
 
         //Foreign Keys
-        public int QuestionId { get; set; }
-        public int ExamSummaryId { get; set; }
+        public int? QuestionId { get; set; }
+        public int? ExamSummaryId { get; set; }
+        public int? QuestionEvaluationId { get; set; }
 
 
         // Navigation

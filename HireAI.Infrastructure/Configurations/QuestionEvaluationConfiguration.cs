@@ -18,8 +18,6 @@ namespace HireAI.Data.Configurations
             builder.Property(qe => qe.Feedback)
                 .HasMaxLength(2000);
 
-            builder.Property(qe => qe.EvaluatedAt)
-                .HasDefaultValueSql("GETUTCDATE()");
 
             // Foreign Keys
             builder.HasOne(qe => qe.ApplicantResponse)

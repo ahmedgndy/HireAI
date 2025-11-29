@@ -3,24 +3,20 @@ using HireAI.Data.DTOs.ApplicantDashboard;
 using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Repositories;
+
+using HireAI.Infrastructure.Intrefaces;
+using HireAI.Data.DTOs.ApplicantDashboard;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using HireAI.Data.Helpers.DTOs.ApplicantApplication;
+using HireAI.Service.Interfaces;
 
 namespace HireAI.Service.Implementation
 {
-    public class ApplicantApplicationService
+    public class ApplicantApplicationService : IApplicantApplicationService
     {
         private readonly IJobPostRepository _jobPostRepository;
+
         private readonly IApplicationRepository _applicationRepository;
-        private readonly IExamRepository _examRepository;
-        private readonly IExamEvaluationRepository _examEvaluationRepository;
-        private readonly IApplicantRepository _applicantRepository;
-        private readonly IApplicantSkillRepository _applicantSkillRepository;
-        private readonly HireAIDbContext _context;
         private readonly IMapper _mapper;
 
         public ApplicantApplicationService(IJobPostRepository jobOpeningRepository, IApplicationRepository applicationRepository, IExamRepository examRepository,
@@ -29,11 +25,6 @@ namespace HireAI.Service.Implementation
         {
             _jobPostRepository = jobOpeningRepository;
             _applicationRepository = applicationRepository;
-            _examRepository = examRepository;
-            _examEvaluationRepository = examEvaluationRepository;
-            _applicantRepository = applicantRepository;
-            _applicantSkillRepository = applicantSkillRepository;
-            _context = context;
             _mapper = mapper;
         }
 
@@ -46,6 +37,24 @@ namespace HireAI.Service.Implementation
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ApplicantApplicationsListDto>>(ApplicationsList);
+        }
+
+        public async Task<ApplicationDetailsDto> GetApplicationDetailsAsync(int applicationId, int applicantId)
+        {
+            var application = await _applicationRepository.GetAll()
+                .AsNoTracking()
+                .Include(a => a.AppliedJob)
+                .Include(a => a.ExamSummary)
+                .ThenInclude(e => e.ExamEvaluation)
+                .Where(a => a.Id == applicationId && a.ApplicantId == applicantId)
+                .FirstOrDefaultAsync();
+
+            if (application == null)
+            {
+                throw new KeyNotFoundException("Application not found.");
+            }
+
+            return _mapper.Map<ApplicationDetailsDto>(application);
         }
     }
 }

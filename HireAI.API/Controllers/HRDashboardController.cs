@@ -9,9 +9,9 @@ namespace HireAI.API.Controllers
     {
 
 
-        private readonly IHRDashboardService _hrDashboardService;
+        private readonly IHrDashboardService _hrDashboardService;
 
-        public HRDashboardController(IHRDashboardService dashboardService)
+        public HRDashboardController(IHrDashboardService dashboardService)
         {
             _hrDashboardService = dashboardService;
         }

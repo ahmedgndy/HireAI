@@ -156,21 +156,21 @@ namespace HireAI.Seeder
             var answers = new List<Answer>();
             var applicantResponses = new List<ApplicantResponse>();
 
-            int examCounter = 0;
+            //int examCounter = 0;
             foreach (var appItem in applications.Where(a => a.ExamStatus == enExamStatus.completed))
             {
-                examCounter++;
-                var exam = new Exam
-                {
-                    ApplicantId = appItem.ApplicantId,
-                    ApplicationId = appItem.Id,
-                    ExamName = $"Coding Test #{examCounter}",
-                    NumberOfQuestions = job.NumberOfQuestions ?? 5,
-                    DurationInMinutes = job.ExamDurationMinutes ?? 30,
-                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 90)),
-                    IsAi = true
-                };
-                exams.Add(exam);
+                //examCounter++;
+                //var exam = new Exam
+                //{
+                //    ApplicantId = appItem.ApplicantId,
+                //    ApplicationId = appItem.Id,
+                //    ExamName = $"Coding Test #{examCounter}",
+                //    NumberOfQuestions = job.NumberOfQuestions ?? 5,
+                //    DurationInMinutes = job.ExamDurationMinutes ?? 30,
+                //    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 90)),
+                //    IsAi = true
+                //};
+                //exams.Add(exam);
             }
             context.Exams.AddRange(exams);
             await context.SaveChangesAsync();
@@ -204,7 +204,6 @@ namespace HireAI.Seeder
                         ExamId = ex.Id,
                         QuestionText = $"Question {q} for Exam {ex.Id}",
                         QuestionNumber = q,
-                        Answer = enQuestionAnswers.A
                     };
                     questions.Add(question);
                 }
@@ -241,7 +240,6 @@ namespace HireAI.Seeder
                     {
                         ExamSummaryId = s.Id,
                         QuestionId = q.Id,
-                        AnswerNumber = answerNum++
                     });
                 }
             }
@@ -307,7 +305,6 @@ namespace HireAI.Seeder
                         ExamEvaluationId = ev.Id,
                         Feedback = "Reviewed: auto-seed feedback",
                         IsCorrect = rnd.NextDouble() > 0.3,
-                        EvaluatedAt = DateTime.UtcNow
                     };
                     questionEvaluations.Add(qEval);
                 }
