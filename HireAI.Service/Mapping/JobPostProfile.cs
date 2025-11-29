@@ -68,7 +68,7 @@ namespace HireAI.Service.Mapping
                         ? src.JobSkills.Select(js => new SkillResponseDto 
                         { 
                             Id = js.Skill.Id, 
-                            Title = js.Skill.Title, 
+                            Title = js.Skill.Name, 
                             Description = js.Skill.Description 
                         }).ToList()
                         : new List<SkillResponseDto>()))

@@ -99,7 +99,7 @@ namespace HireAI.Service.Implementation
             // Get applicant's skill titles (normalized for comparison)
             var applicantSkillTitles = applicant.ApplicantSkills?
                 .Where(s => s.Skill != null)
-                .Select(s => s.Skill!.Title.ToLower().Trim())
+                .Select(s => s.Skill!.Name.ToLower().Trim())
                 .ToHashSet() ?? new HashSet<string>();
 
             // Get all mock exams

@@ -68,11 +68,11 @@ namespace HireAI.Seeder
             // ======== Create some Skills and link to Job ========
             var skills = new List<Skill>
             {
-                new Skill { Title = "C#", Description = "C# programming" },
-                new Skill { Title = "SQL", Description = "Database design and queries" },
-                new Skill { Title = "ASP.NET", Description = "Web development" }
+                new Skill { Name = "C#", Description = "C# programming" },
+                new Skill { Name = "SQL", Description = "Database design and queries" },
+                new Skill { Name = "ASP.NET", Description = "Web development" }
             };
-            context.Siklls.AddRange(skills);
+            context.Skills.AddRange(skills);
             await context.SaveChangesAsync();
 
             var jobSkills = skills.Select(s => new JobSkill { JobId = job.Id, SkillId = s.Id }).ToList();

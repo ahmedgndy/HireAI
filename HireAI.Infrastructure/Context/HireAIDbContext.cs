@@ -31,7 +31,7 @@ namespace HireAI.Infrastructure.Context
         public DbSet<JobSkill> JobSkills { get; set; } = default!;
         public DbSet<QuestionEvaluation> QuestionEvaluations { get; set; } = default!;
         public DbSet<Question> Questions { get; set; } = default!;
-        public DbSet<Skill> Siklls { get; set; } = default!;
+        public DbSet<Skill> Skills { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

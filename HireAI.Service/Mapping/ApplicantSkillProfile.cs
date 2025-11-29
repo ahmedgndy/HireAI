@@ -9,7 +9,7 @@ namespace HireAI.Service.Mapping
         public ApplicantSkillProfile()
         {
             CreateMap<ApplicantSkill, ApplicantSkillImprovementDto>()
-                .ForMember(dest => dest.SkillName, opt => opt.MapFrom(src => src.Skill != null ? src.Skill.Title : string.Empty))
+                .ForMember(dest => dest.SkillName, opt => opt.MapFrom(src => src.Skill != null ? src.Skill.Name : string.Empty))
                 .ForMember(dest => dest.SkillRating, opt => opt.MapFrom(src => src.SkillRate))
                 .ForMember(dest => dest.Month, opt => opt.MapFrom(src => DateTime.UtcNow))
                 .ForMember(dest => dest.ImprovementPercentage, opt => opt.MapFrom(src => src.ImprovementPercentage))

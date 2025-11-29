@@ -11,6 +11,6 @@ namespace HireAI.Data.DTOs.ApplicantDashboard
         public string CompanyLocation { get; set; } = default!;
         public DateTime AppliedAt { get; set; } = DateTime.UtcNow;
         public float? AtsScore { get; set; }
-        public enApplicationStatus ApplicationStatus { get; set; }
+        public string ApplicationStatus { get; set; } = default!; // Changed from enApplicationStatus to string
     }
 }

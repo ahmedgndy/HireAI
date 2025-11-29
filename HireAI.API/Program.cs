@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using HireAI.Service.Interfaces;
 using HireAI.Infrastructure.GenericBase;
+using HireAI.API.Extensions;
 
 
 
@@ -62,11 +63,41 @@ namespace HireAI.API
             // Register repositories and services using extension methods
             builder.Services.AddApplicationRepositories();
             builder.Services.AddApplicationServices();
+            #endregion
 
             #region Add AutoMapper service
             builder.Services.AddAutoMapper(cfg => { },  typeof(ApplicationProfile).Assembly);
             #endregion
 
+            #region Configure CORS to allow requests from any origin
+            builder.Services.AddCors(options =>
+            {
+                // Policy 1: Allow everything (for development)
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+
+                // Policy 2: Restrict to specific origin (for production)
+                options.AddPolicy("ProductionPolicy", builder =>
+                {
+                    builder.WithOrigins("https://myapp.com", "https://www.myapp.com")
+                           .AllowAnyMethod()
+                           .AllowAnyHeader()
+                           .AllowCredentials();
+                });
+
+                // Policy 3: Read-only access
+                options.AddPolicy("ReadOnly", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .WithMethods("GET")
+                           .AllowAnyHeader();
+                });
+            });
+            #endregion
 
             var app = builder.Build();
 
@@ -123,6 +154,8 @@ namespace HireAI.API
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("AllowAll");
+
             app.UseAuthorization();
 
 
@@ -132,3 +165,4 @@ namespace HireAI.API
         }
     }
 }
+
