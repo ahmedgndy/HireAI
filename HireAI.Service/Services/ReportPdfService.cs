@@ -16,6 +16,8 @@ namespace HireAI.Service.Services
     {
         public byte[] GeneratePdf(ReportDto report)
         {
+            QuestPDF.Settings.License = LicenseType.Community;
+
             var pdf = Document.Create(container =>
             {
                 container.Page(page =>

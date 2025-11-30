@@ -32,25 +32,31 @@ namespace HireAI.Infrastructure.Repositories
         }
         public async Task<ICollection<ApplicantDto>> GetApplicantDtosForJobAsync(int jobId)
         {
-            var jobPost = await _context.JobPosts
+            // Eager load Applicants and Applications
+            var job = await _context.JobPosts
+                .Include(j => j.Applicants)
                 .Include(j => j.Applications)
-                    .ThenInclude(a => a.Applicant)
-                .Include(j => j.Applications)
-                .Include(a => a.ExamEvaluations)
+                .ThenInclude(g=>g.ExamEvaluation)
+                .AsNoTracking() // for read-only queries
                 .FirstOrDefaultAsync(j => j.Id == jobId);
 
-            if (jobPost == null) return new List<ApplicantDto>();
+            if (job == null)
+                return new List<ApplicantDto>();
 
-            var applicantDtos = jobPost.Applications
-                .Select(a => new ApplicantDto
+            // Map applicants to DTOs
+            var applicantDtos = job.Applicants.Select(a =>
+            {
+                var app = job.Applications.FirstOrDefault(ap => ap.ApplicantId == a.Id);
+                return new ApplicantDto
                 {
-                    Name = $"{a.Applicant.Name}",
-                    Email = a.Applicant.Email,
-                    AtsScore = a.AtsScore ?? 1.0f,
-                    ExamScore = a != null ? a.ExamEvaluation.TotalScore : (float?)null,
-                    Status = a.ExamStatus.ToString()
-                })
-                .ToList();
+                   
+                    Name = a.Name,
+                    Email = a.Email,
+                    AtsScore = app?.AtsScore ?? 0,
+                    ExamScore = app?.ExamEvaluation.TotalScore,
+              
+                };
+            }).ToList();
 
             return applicantDtos;
         }
