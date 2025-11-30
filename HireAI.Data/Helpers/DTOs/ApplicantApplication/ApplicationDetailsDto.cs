@@ -3,7 +3,7 @@
 
 namespace HireAI.Data.Helpers.DTOs.ApplicantApplication
 {
-    public class ApplicationDetailsDto
+    public class ApplicationDetailsDto 
     {
         public string JobTitle { get; set; } = default!;
         public string CompanyName { get; set; } = default!;
