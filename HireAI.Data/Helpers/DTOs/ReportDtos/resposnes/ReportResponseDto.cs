@@ -13,7 +13,6 @@ namespace HireAI.Data.Helpers.DTOs.ReportDtos.resposnes
         public int TotalApplicants { get; set; }
         public double AtsPassPercent { get; set; }
         public double AvgExamScore { get; set; }
-        public Dictionary<string, int> StatusCounts { get; set; } = new Dictionary<string, int>();
         public List<ApplicantDto> Applicants { get; set; } = new List<ApplicantDto>();
     }
 }

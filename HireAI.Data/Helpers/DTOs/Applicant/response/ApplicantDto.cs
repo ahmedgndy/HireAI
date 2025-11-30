@@ -10,8 +10,8 @@ namespace HireAI.Data.Helpers.DTOs.Applicant.response
     {
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public int AtsScore { get; set; }
-        public int? ExamScore { get; set; }
+        public float AtsScore { get; set; }
+        public float? ExamScore { get; set; }
         public string Status { get; set; } = string.Empty;
     }
 }
