@@ -11,8 +11,7 @@ namespace HireAI.Data.Helpers.DTOs.ReportDtos.resposnes
     {
         public string JobTitle { get; set; } = string.Empty;
         public int TotalApplicants { get; set; }
-        public double AtsPassPercent { get; set; }
-        public double AvgExamScore { get; set; }
+        public float AtsPassPercent { get; set; }
         public List<ApplicantDto> Applicants { get; set; } = new List<ApplicantDto>();
     }
 }

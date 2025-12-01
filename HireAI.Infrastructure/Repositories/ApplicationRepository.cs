@@ -9,5 +9,31 @@ namespace HireAI.Infrastructure.Repositories
     public class ApplicationRepository : GenericRepositoryAsync<Application>, IApplicationRepository
     {
         public ApplicationRepository(HireAIDbContext db) : base(db) { }
+
+        public async Task<int?> GetAtsPassingScore(int jobId)
+        {
+           return await _dbSet.Where(app => app.JobId == jobId & app.AtsScore>70).CountAsync();
+        }
+
+        public async Task<float?> GetAvgExamPassingScore(int jobId)
+        {
+            var query = _dbSet
+                .Where(app => app.JobId == jobId && app.ExamEvaluation != null)
+                .Select(app => app.ExamEvaluation.TotalScore)
+                .Where(score => score > 70);
+
+            var list = await query.ToListAsync();
+
+            if (!list.Any())
+                return 0; // or null — up to you
+
+            return list.Average();
+        }
     }
 }
+
+
+
+
+
+

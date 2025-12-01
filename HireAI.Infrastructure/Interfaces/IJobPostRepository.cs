@@ -8,5 +8,7 @@ namespace HireAI.Infrastructure.GenericBase
                      
         public Task<ICollection<JobPost>?>  GetJobPostForHrAsync(int hrid);
         public Task<ICollection<ApplicantDto>> GetApplicantDtosForJobAsync(int jobId);
+
+        public Task<int> GetTotalApplicationAsncy(int jobId);
     }
 }

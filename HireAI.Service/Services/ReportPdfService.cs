@@ -35,7 +35,6 @@ namespace HireAI.Service.Services
                     {
                         col.Item().Text($"Total Applicants: {report.TotalApplicants}");
                         col.Item().Text($"ATS Pass %: {report.AtsPassPercent:F1}%");
-                        col.Item().Text($"Average Exam Score: {report.AvgExamScore:F1}");
                         col.Item().Text("Status Counts:");
                         //foreach (var status in report.StatusCounts)
                         //    col.Item().Text($"  {status.Key}: {status.Value}");

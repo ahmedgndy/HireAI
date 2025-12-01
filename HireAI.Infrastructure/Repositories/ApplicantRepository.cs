@@ -14,5 +14,6 @@ namespace HireAI.Infrastructure.Repositories
         public ApplicantRepository(HireAIDbContext db) : base(db)
         { }
 
+
     }
 }

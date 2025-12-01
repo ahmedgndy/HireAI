@@ -1,6 +1,7 @@
 ﻿using HireAI.Data.Helpers.DTOs.Applicant.response;
 using HireAI.Data.Helpers.DTOs.ReportDtos.resposnes;
 using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Intrefaces;
 using HireAI.Service.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,9 +13,11 @@ namespace HireAI.Service.Services
 {
     public class ReportService : IReportService
     {
-        private readonly IJobPostRepository _jobPostRepository; 
-        public ReportService(IJobPostRepository jobPostRepository) {
+        private readonly IJobPostRepository _jobPostRepository;
+        private readonly IApplicationRepository _applicantRepository; 
+        public ReportService(IJobPostRepository jobPostRepository , IApplicationRepository applicationRepository) {
             _jobPostRepository = jobPostRepository;
+            _applicantRepository = applicationRepository; 
         }
         public async Task<ReportDto> GetReportByJobIdAsync(int jobId)
         {
@@ -25,17 +28,15 @@ namespace HireAI.Service.Services
 
             var applicantDtos = await _jobPostRepository.GetApplicantDtosForJobAsync(jobId);
 
-            var totalApplicants = jobPost.Applicants.Count;
-            var atsPassingScore = jobPost.ATSMinimumScore ?? 0;
-            var passedApplicants = jobPost.Applications.Count(a => a.AtsScore >= atsPassingScore);
-            var atsPassPercent = totalApplicants == 0 ? 0 : (double)passedApplicants / totalApplicants * 100;
+            var totalApplicants = await _jobPostRepository.GetTotalApplicationAsncy(jobId);
+            var atsPassingScore = await _applicantRepository.GetAtsPassingScore(jobId);
+            var atsPassPercent = totalApplicants == 0 ? 0 : (float)atsPassingScore / totalApplicants * 100;
 
             var report = new ReportDto
             {
                 JobTitle = jobPost.Title,
                 TotalApplicants = totalApplicants,
                 AtsPassPercent = atsPassPercent,
-                AvgExamScore = 0, // add logic if needed
                 Applicants = applicantDtos.ToList()
             };
 

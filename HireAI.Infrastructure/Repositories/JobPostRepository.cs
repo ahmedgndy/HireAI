@@ -6,12 +6,18 @@ using HireAI.Infrastructure.GenaricBasies;
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Intrefaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Threading;
 
 namespace HireAI.Infrastructure.Repositories
 {
     public class JobPostRepository : GenericRepositoryAsync<JobPost>, IJobPostRepository
     {
-        public JobPostRepository(HireAIDbContext db) : base(db) { }
+        private readonly IApplicationRepository _applicationRepository;
+        public JobPostRepository(HireAIDbContext db ,IApplicationRepository applicationRepository
+            ) : base(db) { 
+                _applicationRepository = applicationRepository;
+        }
 
         public async Task<ICollection<JobPost>?> GetJobPostForHrAsync(int hrid)
         {
@@ -30,37 +36,41 @@ namespace HireAI.Infrastructure.Repositories
                     .FirstOrDefaultAsync(jp => jp.Id == id);
 
         }
-        public async Task<ICollection<ApplicantDto>> GetApplicantDtosForJobAsync(int jobId)
+       
+          public async Task<ICollection<ApplicantDto>> GetApplicantDtosForJobAsync(int jobId)
         {
-            // Eager load Applicants and Applications
-            var job = await _context.JobPosts
-                .Include(j => j.Applicants)
-                .Include(j => j.Applications)
-                .ThenInclude(g=>g.ExamEvaluation)
-                .AsNoTracking() // for read-only queries
-                .FirstOrDefaultAsync(j => j.Id == jobId);
-
-            if (job == null)
-                return new List<ApplicantDto>();
-
-            // Map applicants to DTOs
-            var applicantDtos = job.Applicants.Select(a =>
-            {
-                var app = job.Applications.FirstOrDefault(ap => ap.ApplicantId == a.Id);
-                return new ApplicantDto
+            var result = await _context.Applications
+                .AsNoTracking()
+                .Where(ap => ap.JobId == jobId)
+                .Select(ap => new ApplicantDto
                 {
-                   
-                    Name = a.Name,
-                    Email = a.Email,
-                    AtsScore = app?.AtsScore ?? 0,
-                    ExamScore = app?.ExamEvaluation.TotalScore,
-              
-                };
-            }).ToList();
+                    // Applicant navigation used only for projecting fields; EF will translate to JOIN
+                    Name = ap.Applicant != null ? ap.Applicant.Name : null,
+                    Email = ap.Applicant != null ? ap.Applicant.Email : null,
+                    AtsScore = ap.AtsScore,
+                    // Null-safe projection of ExamEvaluation.TotalScore
+                    ExamScore = ap.ExamEvaluation != null ? (float?)ap.ExamEvaluation.TotalScore : null,
+                })
+                .ToListAsync();
 
-            return applicantDtos;
+            return result;
         }
 
+       
+
+        public async Task<int> GetTotalApplicationAsncy(int jobId)
+        {
+                      return await _dbSet
+                          .Where(j=> j.Id==jobId)
+                          .Join(
+                              _applicationRepository.GetAll(), 
+                               job =>job.Id,
+                               application => application.JobId,
+                               (job, application) => application    
+                               ).CountAsync();
+
+            
+        }
 
     }
 }
