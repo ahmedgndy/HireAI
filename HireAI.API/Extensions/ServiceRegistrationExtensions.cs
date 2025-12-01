@@ -1,5 +1,7 @@
+using Amazon.S3;
 using HireAI.Service.Implementation;
 using HireAI.Service.Interfaces;
+using HireAI.Service.Services;
 
 namespace HireAI.API.Extensions
 {
@@ -18,6 +20,10 @@ namespace HireAI.API.Extensions
             services.AddScoped<IExamService, ExamService>();
             services.AddScoped<IJobPostService, JopPostService>();
             services.AddScoped<IHrDashboardService, HRDashboardService>();
+            services.AddScoped<IS3Service, S3Service>();
+
+
+
 
             return services;
         }

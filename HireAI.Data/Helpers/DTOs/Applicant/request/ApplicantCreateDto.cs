@@ -1,6 +1,6 @@
 using HireAI.Data.Helpers.Enums;
 using System.ComponentModel.DataAnnotations;
-
+using Microsoft.AspNetCore.Http;
 namespace HireAI.Data.Helpers.DTOs.Applicant.Request
 {
     /// <summary>
@@ -30,11 +30,10 @@ namespace HireAI.Data.Helpers.DTOs.Applicant.Request
         public string? Title { get; set; }
 
         [Required]
-        [Url]
-        public string ResumeUrl { get; set; } = default!;
-
+      
+        public IFormFile CvFile { get; set; }
         public enSkillLevel? SkillLevel { get; set; } = enSkillLevel.Beginner;
 
-        public int? CVId { get; set; }
+
     }
 }

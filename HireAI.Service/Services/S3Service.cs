@@ -13,7 +13,7 @@ namespace HireAI.Service.Services
     public class S3Service : IS3Service
     {
         private readonly IAmazonS3 _s3;
-        private readonly string _bucketName = "hireai-bucket"; 
+        private readonly string _bucketName = "hireaibucket"; 
         private  readonly string _region = "us-east-1";
         public S3Service(IAmazonS3 s3) {
             _s3 = s3;

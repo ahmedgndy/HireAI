@@ -10,6 +10,10 @@ using Microsoft.EntityFrameworkCore;
 using HireAI.Service.Interfaces;
 using HireAI.Infrastructure.GenericBase;
 using HireAI.API.Extensions;
+using Amazon.S3;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace HireAI.API
 {
@@ -39,6 +43,18 @@ namespace HireAI.API
 
             // Add AutoMapper service
             builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationProfile).Assembly);
+
+            // Configure AWS S3 with credentials from appsettings
+            var awsAccessKey = builder.Configuration["AWS:AccessKey"];
+            var awsSecretKey = builder.Configuration["AWS:SecretKey"];
+            var awsRegion = builder.Configuration["AWS:Region"];
+
+            // Replace the incorrect AddAWSService registration with the correct usage of AWSOptions
+            var awsOptions = builder.Configuration.GetAWSOptions();
+            awsOptions.Credentials = new Amazon.Runtime.BasicAWSCredentials(awsAccessKey, awsSecretKey);
+            awsOptions.Region = RegionEndpoint.GetBySystemName(awsRegion);
+            builder.Services.AddDefaultAWSOptions(awsOptions);
+            builder.Services.AddAWSService<IAmazonS3>();
 
             var app = builder.Build();
 
