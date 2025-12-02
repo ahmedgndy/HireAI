@@ -1,9 +1,11 @@
 ﻿using Amazon.S3;
+using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using HireAI.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,6 +45,25 @@ namespace HireAI.Service.Services
 
           var url = $"https://{_bucketName}.s3.{_region}.amazonaws.com/{key}";
           return url;
+        }
+
+        public async Task<(Stream FileStream, string ContentType, string FileName)> DownloadFileAsync(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentException("Key cannot be null or empty", nameof(key));
+            }
+
+            var getObjectRequest = new GetObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = key
+            };
+
+            var response = await _s3.GetObjectAsync(getObjectRequest);
+
+            var fileName = Path.GetFileName(key);
+            return (response.ResponseStream, response.Headers.ContentType, fileName);
         }
     }
 }

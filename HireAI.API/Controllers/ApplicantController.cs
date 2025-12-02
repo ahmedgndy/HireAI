@@ -85,6 +85,7 @@ namespace HireAI.API.Controllers
                 // log ex in real app
                 return StatusCode(500, $"Failed to upload file: {ex.Message}");
             }
+            _ 
             Console.WriteLine($"Resume uploaded successfully. URL: {resumeUrl}");
 
             // The rest of your logic here...
