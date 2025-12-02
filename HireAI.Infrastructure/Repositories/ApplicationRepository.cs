@@ -25,7 +25,7 @@ namespace HireAI.Infrastructure.Repositories
             var list = await query.ToListAsync();
 
             if (!list.Any())
-                return 0; // or null — up to you
+                return 0;
 
             return list.Average();
         }

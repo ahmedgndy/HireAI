@@ -1,5 +1,6 @@
 using HireAI.Data.Helpers.DTOs.Applicant.response;
 using HireAI.Data.Helpers.DTOs.ReportDtos.resposnes;
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.GenaricBasies;
@@ -41,7 +42,7 @@ namespace HireAI.Infrastructure.Repositories
         {
             var result = await _context.Applications
                 .AsNoTracking()
-                .Where(ap => ap.JobId == jobId)
+                .Where(ap => ap.JobId == jobId && ap.AtsScore>70 && ap.ExamStatus == enExamStatus.notTaken)
                 .Select(ap => new ApplicantDto
                 {
                     // Applicant navigation used only for projecting fields; EF will translate to JOIN
@@ -50,7 +51,7 @@ namespace HireAI.Infrastructure.Repositories
                     AtsScore = ap.AtsScore,
                     // Null-safe projection of ExamEvaluation.TotalScore
                     ExamScore = ap.ExamEvaluation != null ? (float?)ap.ExamEvaluation.TotalScore : null,
-                })
+                }).OrderByDescending(a => a.AtsScore).Take(10)
                 .ToListAsync();
 
             return result;
