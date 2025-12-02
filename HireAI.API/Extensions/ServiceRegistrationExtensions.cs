@@ -21,8 +21,8 @@ namespace HireAI.API.Extensions
             services.AddScoped<IJobPostService, JopPostService>();
             services.AddScoped<IHrDashboardService, HRDashboardService>();
             services.AddScoped<IS3Service, S3Service>();
-
-
+            services.AddScoped<IReportPdfService, ReportPdfService>();
+            services.AddScoped<IReportService,ReportService>();
 
 
             return services;

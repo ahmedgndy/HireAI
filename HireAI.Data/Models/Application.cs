@@ -20,6 +20,7 @@ namespace HireAI.Data.Models
         public int? ApplicantId { get; set; }
         public int? JobId { get; set; }
         public int? ExamId { get; set; }
+        public int? ExamEvaluationId { get; set; }  
 
         //Navigation Property
         public HR? HR { get; set; }
@@ -27,6 +28,7 @@ namespace HireAI.Data.Models
         public JobPost? AppliedJob { get; set; }
         public Exam? Exam { get; set; }
         public ExamSummary? ExamSummary { get; set; }
+        public ExamEvaluation? ExamEvaluation { get; set; }
 
         //add this exam status
         public enExamStatus ExamStatus { get; set; } = enExamStatus.notTaken;
