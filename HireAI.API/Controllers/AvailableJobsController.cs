@@ -8,7 +8,7 @@ namespace HireAI.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "HR,Applicant")]
     public class AvailableJobsController : ControllerBase
     {
         private readonly IApplicantJobPostService _applicantJobOpeningService;

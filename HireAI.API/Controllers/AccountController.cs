@@ -29,6 +29,18 @@ namespace HireAI.API.Controllers
             return response.IsAuthenticated ? Ok(response) : BadRequest(response);
         }
 
+        [HttpPost("RegisterHR")]
+        [AllowAnonymous] // Public - anyone can register
+        public async Task<IActionResult> RegisterHR([FromBody] RegisterHrDto registerDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(new { errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)) });
+
+            var response = await _authService.RegisterHRAsync(registerDto);
+
+            return response.IsAuthenticated ? Ok(response) : BadRequest(response);
+        }
+
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)

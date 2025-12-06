@@ -40,7 +40,7 @@ namespace HireAI.API
             //REGISTER ApplicationUser and IdentityRole with the DI Container
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 4;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;

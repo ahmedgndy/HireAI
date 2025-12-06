@@ -7,7 +7,7 @@ namespace HireAI.Data.Helpers.DTOs.Applicant
     public class ApplicantResponseDto
     {
         public int Id { get; set; }
-        public string Name { get; set; } = default!;
+        public string FullName { get; set; } = default!;
         public string Email { get; set; } = default!;
         public DateOnly DateOfBirth { get; set; }
         public string? Phone { get; set; }

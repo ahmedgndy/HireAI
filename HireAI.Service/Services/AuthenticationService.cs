@@ -5,10 +5,12 @@ using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
 using HireAI.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace HireAI.Service.Services
@@ -20,11 +22,8 @@ namespace HireAI.Service.Services
         private readonly IConfiguration _config;
         private readonly HireAIDbContext _dbContext;
 
-        public AuthenticationService(
-            UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager,
-            IConfiguration config,
-            HireAIDbContext dbContext)
+        public AuthenticationService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+            IConfiguration config, HireAIDbContext dbContext)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -48,14 +47,14 @@ namespace HireAI.Service.Services
                 }
 
                 // Create ApplicationUser (Identity) - Use email as username
-                var user = new ApplicationUser
+                var ApplicationUser = new ApplicationUser
                 {
                     UserName = registerDto.Email, // Set email as username
                     Email = registerDto.Email,
                     PhoneNumber = registerDto.Phone
                 };
 
-                var result = await _userManager.CreateAsync(user, registerDto.Password);
+                var result = await _userManager.CreateAsync(ApplicationUser, registerDto.Password);
 
                 if (!result.Succeeded)
                 {
@@ -68,7 +67,7 @@ namespace HireAI.Service.Services
                 }
 
                 // Assign Applicant role
-                await _userManager.AddToRoleAsync(user, "Applicant");
+                await _userManager.AddToRoleAsync(ApplicationUser, "Applicant");
 
                 // Create Applicant profile (Domain Model)
                 var applicant = new Applicant
@@ -91,14 +90,100 @@ namespace HireAI.Service.Services
                 await _dbContext.SaveChangesAsync();
 
                 // Link ApplicationUser to Applicant
-                user.ApplicantId = applicant.Id;
-                await _userManager.UpdateAsync(user);
+                ApplicationUser.ApplicantId = applicant.Id;
+                await _userManager.UpdateAsync(ApplicationUser);
 
                 return new AuthResponseDto
                 {
                     IsAuthenticated = true,
-                    IdentityUserId = user.Id,
-                    Message = "User registered successfully"
+                    IdentityUserId = ApplicationUser.Id,
+                    UserId = applicant.Id,
+                    UserRole = "Applicant",
+                    Message = "Applicant registered successfully"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new AuthResponseDto
+                {
+                    IsAuthenticated = false,
+                    Message = "An error occurred during registration",
+                    Errors = new List<string> { ex.Message }
+                };
+            }
+        }
+
+        public async Task<AuthResponseDto> RegisterHRAsync(RegisterHrDto registerDto)
+        {
+            try
+            {
+                // Validate if email already exists
+                var existingEmail = await _userManager.FindByEmailAsync(registerDto.Email);
+                if (existingEmail != null)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsAuthenticated = false,
+                        Message = "Email already registered"
+                    };
+                }
+
+                // Create ApplicationUser (Identity) - Use email as username
+                var ApplicationUser = new ApplicationUser
+                {
+                    UserName = registerDto.Email, // Set email as username
+                    Email = registerDto.Email,
+                    PhoneNumber = registerDto.Phone
+                };
+
+                var result = await _userManager.CreateAsync(ApplicationUser, registerDto.Password);
+
+                if (!result.Succeeded)
+                {
+                    return new AuthResponseDto
+                    {
+                        IsAuthenticated = false,
+                        Message = "Registration failed",
+                        Errors = result.Errors.Select(e => e.Description).ToList()
+                    };
+                }
+
+                // Assign HR role
+                await _userManager.AddToRoleAsync(ApplicationUser, "HR");
+
+                // Create HR profile (Domain Model)
+                var hr = new HR
+                {
+                    FullName = registerDto.FullName,
+                    Email = registerDto.Email,
+                    Address = registerDto.HrAddress ?? string.Empty,
+                    DateOfBirth = registerDto.DateOfBirth,
+                    Phone = registerDto.Phone,
+                    Title = registerDto.JobTitle,
+                    CompanyName = registerDto.CompanyName,
+                    CompanyAddress = registerDto.CompanyAddress,
+                    CompanyDescription = registerDto.CompanyDescription,
+                    AccountType = registerDto.AccountType ?? enAccountType.Free,
+                    Role = enRole.HR,
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                // Save HR to database
+                _dbContext.HRs.Add(hr);
+                await _dbContext.SaveChangesAsync();
+
+                // Link ApplicationUser to HR
+                ApplicationUser.HRId = hr.Id;
+                await _userManager.UpdateAsync(ApplicationUser);
+
+                return new AuthResponseDto
+                {
+                    IsAuthenticated = true,
+                    IdentityUserId = ApplicationUser.Id,
+                    UserId = hr.Id,
+                    UserRole = "HR",
+                    Message = "HR user registered successfully"
                 };
             }
             catch (Exception ex)
@@ -117,9 +202,9 @@ namespace HireAI.Service.Services
             try
             {
                 // Find user by email instead of username
-                var user = await _userManager.FindByEmailAsync(loginDto.Email);
+                var ApplicationUser = await _userManager.FindByEmailAsync(loginDto.Email);
 
-                if (user == null)
+                if (ApplicationUser == null)
                 {
                     return new AuthResponseDto
                     {
@@ -128,7 +213,7 @@ namespace HireAI.Service.Services
                     };
                 }
 
-                var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+                var isPasswordCorrect = await _userManager.CheckPasswordAsync(ApplicationUser, loginDto.Password);
 
                 if (!isPasswordCorrect)
                 {
@@ -139,19 +224,24 @@ namespace HireAI.Service.Services
                     };
                 }
 
-                var roles = await _userManager.GetRolesAsync(user);
-                var token = GenerateJwtToken(user, roles);
+                var roles = await _userManager.GetRolesAsync(ApplicationUser);
+                var token = GenerateJwtToken(ApplicationUser, roles);
                 var refreshToken = GenerateRefreshToken();
 
-                // Save refresh token to database
+                // ✅ Detach the user to prevent EF from tracking it in this context
+                //_dbContext.Entry(ApplicationUser).State = EntityState.Detached;
+
+
+                // Save refresh token to database - FIXED: Set User navigation property
                 var userRefreshToken = new UserRefreshToken
                 {
-                    UserId = user.Id,
+                    UserId = ApplicationUser.Id,
                     AccessToken = token,
                     RefreshToken = refreshToken,
                     JwtId = Guid.NewGuid().ToString(),
                     CreatedDate = DateTime.UtcNow,
-                    ExpiryDate = DateTime.UtcNow.AddDays(7)
+                    ExpiryDate = DateTime.UtcNow.AddDays(7),
+                    IsRevoked = false // ✅ Explicitly set this
                 };
 
                 _dbContext.Set<UserRefreshToken>().Add(userRefreshToken);
@@ -197,15 +287,23 @@ namespace HireAI.Service.Services
                 int? userSpecificId = null;
                 string? userRole = null;
 
-                if (user.ApplicantId.HasValue)
+                if (ApplicationUser.ApplicantId.HasValue)
                 {
-                    userSpecificId = user.ApplicantId; ;
+                    userSpecificId = ApplicationUser.ApplicantId; ;
                     userRole = "Applicant";
+
+                    var applicant = await _dbContext.Applicants.FindAsync(ApplicationUser.ApplicantId.Value);
+                    applicant.LastLogin = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
                 }
-                else if (user.HRId.HasValue)
+                else if (ApplicationUser.HRId.HasValue)
                 {
-                    userSpecificId = user.HRId;
+                    userSpecificId = ApplicationUser.HRId;
                     userRole = "HR";
+
+                    var Hr = await _dbContext.HRs.FindAsync(ApplicationUser.HRId.Value);
+                    Hr.LastLogin = DateTime.UtcNow;
+                    await _dbContext.SaveChangesAsync();
                 }
                 else
                 {
@@ -222,7 +320,7 @@ namespace HireAI.Service.Services
                     Token = token,
                     RefreshToken = refreshToken,
                     ExpiresOn = DateTime.UtcNow.AddMinutes(30),
-                    IdentityUserId = user.Id, // Identity framework ID
+                    IdentityUserId = ApplicationUser.Id, // Identity framework ID
                     UserId = userSpecificId, // Applicant/HR ID
                     UserRole = userRole, // roles.Contains("Applicant") ? "Applicant" : "HR",
                     Message = "Login successful"
@@ -276,9 +374,13 @@ namespace HireAI.Service.Services
                     };
                 }
 
-                // Validate refresh token from database
-                var storedRefreshToken = user.UserRefreshTokens.FirstOrDefault(t =>
-                    t.RefreshToken == refreshToken && !t.IsRevoked && t.ExpiryDate > DateTime.UtcNow);
+                // Validate refresh token from database - Query directly instead of using navigation property
+                var storedRefreshToken = await _dbContext.Set<UserRefreshToken>()
+                    .FirstOrDefaultAsync(t => 
+                        t.UserId == userId && 
+                        t.RefreshToken == refreshToken && 
+                        !t.IsRevoked && 
+                        t.ExpiryDate > DateTime.UtcNow);
 
                 if (storedRefreshToken == null)
                 {
@@ -301,6 +403,29 @@ namespace HireAI.Service.Services
                 _dbContext.Set<UserRefreshToken>().Update(storedRefreshToken);
                 await _dbContext.SaveChangesAsync();
 
+                // Determine user type and ID 
+                int? userSpecificId = null;
+                string? userRole = null;
+
+                if (user.ApplicantId.HasValue)
+                {
+                    userSpecificId = user.ApplicantId;
+                    userRole = "Applicant";
+                }
+                else if (user.HRId.HasValue)
+                {
+                    userSpecificId = user.HRId;
+                    userRole = "HR";
+                }
+                else
+                {
+                    return new AuthResponseDto
+                    {
+                        IsAuthenticated = false,
+                        Message = "User profile not found"
+                    };
+                }
+
                 return new AuthResponseDto
                 {
                     IsAuthenticated = true,
@@ -308,6 +433,8 @@ namespace HireAI.Service.Services
                     RefreshToken = newRefreshToken,
                     ExpiresOn = DateTime.UtcNow.AddMinutes(30),
                     IdentityUserId = user.Id,
+                    UserId = userSpecificId, 
+                    UserRole = userRole, 
                     Message = "Token refreshed successfully"
                 };
             }
@@ -331,13 +458,18 @@ namespace HireAI.Service.Services
                 if (user == null)
                     return false;
 
+                // Query tokens directly from database
+                var userTokens = await _dbContext.Set<UserRefreshToken>()
+                    .Where(t => t.UserId == userId)
+                    .ToListAsync();
+
                 // Mark all user tokens as revoked
-                foreach (var token in user.UserRefreshTokens)
+                foreach (var token in userTokens)
                 {
                     token.IsRevoked = true;
                 }
 
-                _dbContext.Set<UserRefreshToken>().UpdateRange(user.UserRefreshTokens);
+                _dbContext.Set<UserRefreshToken>().UpdateRange(userTokens);
                 await _dbContext.SaveChangesAsync();
 
                 return true;
@@ -357,31 +489,36 @@ namespace HireAI.Service.Services
                 new Claim(ClaimTypes.Email, user.Email ?? string.Empty)
             };
 
+            //Add all User Roles to the UserClaims
             foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            //Add the Token Generated id change (JWT Predefind Claims ) to generate new token every login
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
 
+            //Now it's time for the Signature part in the token
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SecurityKey"]));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            //Design Token
             var token = new JwtSecurityToken(
                 issuer: _config["JWT:IssuerIP"],
-                audience: _config["JWT:AudienceIP"],
+                audience: _config["JWT:AudienceIP"], //Angular Localhost
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(30),
                 signingCredentials: signingCredentials
             );
 
+            //Generate Token response
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private string GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
-            using (var rng = System.Security.Cryptography.RandomNumberGenerator.Create())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(randomNumber);
                 return Convert.ToBase64String(randomNumber);

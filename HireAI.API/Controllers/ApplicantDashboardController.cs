@@ -1,7 +1,11 @@
-﻿using HireAI.Service.Services;
+﻿using HireAI.Data.Models;
+using HireAI.Data.Models.Identity;
+using HireAI.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HireAI.API.Controllers
 {
@@ -12,11 +16,14 @@ namespace HireAI.API.Controllers
     {
         private readonly ApplicantDashboardService _applicantDashboardService;
         private readonly ApplicantApplicationService _applicantApplicationService;
+        private UserManager<ApplicationUser> _userManager;
 
-        public ApplicantDashboardController(ApplicantDashboardService applicantDashboardService, ApplicantApplicationService applicantApplicationService)
+        public ApplicantDashboardController(ApplicantDashboardService applicantDashboardService, ApplicantApplicationService applicantApplicationService,
+            UserManager<ApplicationUser> userManager)
         {
             _applicantDashboardService = applicantDashboardService;
             _applicantApplicationService = applicantApplicationService;
+            _userManager = userManager;
         }
 
         [HttpGet("{Id}")]
@@ -29,6 +36,13 @@ namespace HireAI.API.Controllers
             string SkillLevel = await _applicantDashboardService.GetSkillLevelPerApplicantAsync(Id);
             var ApplicationTimeline = await _applicantDashboardService.GetApplicationTimelinePerApplicantAsync(Id);
             var ApplicantSkillImprovementScore = await _applicantDashboardService.GetApplicantSkillImprovementScoreAsync(Id);
+
+            // Optional: Check if requesting user owns this profile
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _userManager.FindByIdAsync(userIdClaim);
+
+            if (Id != user.ApplicantId)
+                return Forbid();
 
             return Ok(new
             {

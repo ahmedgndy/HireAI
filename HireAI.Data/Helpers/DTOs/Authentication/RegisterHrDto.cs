@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HireAI.Data.Helpers.DTOs.Authentication
 {
-    public class RegisterApplicantDto
+    public class RegisterHrDto
     {
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Invalid email format")]
@@ -23,8 +23,18 @@ namespace HireAI.Data.Helpers.DTOs.Authentication
         [StringLength(200)]
         public string FullName { get; set; } = default!;
 
+        [StringLength(200)]
+        public string? HrAddress { get; set; }
+
+        [Required(ErrorMessage = "Company Name is required")]
+        [StringLength(200)]
+        public string CompanyName { get; set; } = default!;
+
         [StringLength(100)]
-        public string? Address { get; set; }
+        public string? CompanyAddress { get; set; }
+
+        [StringLength(100)]
+        public string? CompanyDescription { get; set; }
 
         [Phone(ErrorMessage = "Invalid phone number format")]
         public string? Phone { get; set; }
@@ -33,11 +43,8 @@ namespace HireAI.Data.Helpers.DTOs.Authentication
         public DateOnly DateOfBirth { get; set; }
 
         [StringLength(100)]
-        public string? Title { get; set; }
+        public string? JobTitle { get; set; }
 
-        [Required(ErrorMessage = "Resume Url is required")]
-        public string ResumeUrl { get; set; } = default!;
-
-        public enSkillLevel? SkillLevel { get; set; } = enSkillLevel.Beginner;
+        public enAccountType? AccountType { get; set; } = enAccountType.Free;
     }
 }
