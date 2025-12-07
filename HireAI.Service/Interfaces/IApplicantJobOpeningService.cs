@@ -1,5 +1,5 @@
 ﻿using HireAI.Data.DTOs;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;

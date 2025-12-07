@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response
+namespace HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response
 {
     using global::HireAI.Data.Helpers.DTOs.SkillDtos;
     using global::HireAI.Data.Helpers.Enums;
@@ -12,7 +12,7 @@ namespace HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response
     using System;
     using System.Collections.Generic;
 
-    namespace HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response
+    namespace HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response
     {
         /// <summary>
         /// DTO used to return a JobPost response.

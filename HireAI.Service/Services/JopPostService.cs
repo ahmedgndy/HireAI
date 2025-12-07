@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using HireAI.Data.Helpers.DTOs.JopOpening.Request;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpening.Request;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Intrefaces;
@@ -14,29 +14,29 @@ using System.Threading.Tasks;
 namespace HireAI.Service.Services
 {
 
-    public class JopPostService : IJobPostService
+    public class JobPostService : IJobPostService
 
     {
         private readonly IMapper _mapper;
         private readonly IJobPostRepository _jobPostRepository;
         private readonly IJobSkillRepository _jobSkillRepository;
 
-        public JopPostService(IMapper mapper , IJobPostRepository jobOpeningRepository , IJobSkillRepository jobSkillRepository)
+        public JobPostService(IMapper mapper , IJobPostRepository jobOpeningRepository , IJobSkillRepository jobSkillRepository)
         {
             _mapper = mapper;
             _jobPostRepository = jobOpeningRepository;
             _jobSkillRepository = jobSkillRepository;
         }
 
-        public async Task CreateJobPostAsync(JobPostRequestDto jopOpeingRequestDto)
+        public async Task CreateJobPostAsync(JobPostRequestDto JobOpeingRequestDto)
         {
             //save job 
-            var createPostEntity = _mapper.Map<JobPost>(jopOpeingRequestDto);
+            var createPostEntity = _mapper.Map<JobPost>(JobOpeingRequestDto);
 
             await _jobPostRepository.AddAsync(createPostEntity);
 
             //tie skills to job
-            var skillIds = jopOpeingRequestDto.SkillIds;
+            var skillIds = JobOpeingRequestDto.SkillIds;
             if (skillIds != null && skillIds.Any())
             {
               for (int i = 0; i < skillIds.Count(); i++)
@@ -70,16 +70,16 @@ namespace HireAI.Service.Services
 
         public async Task<JobPostResponseDto> GetJobPostAsync(int id)
         {
-           var jopPost = await _jobPostRepository.GetByIdAsync(id);
+           var JobPost = await _jobPostRepository.GetByIdAsync(id);
            
-           if(jopPost == null)
+           if(JobPost == null)
            {
                   throw new Exception("Job Post not found");
            }
 
            var jobSkills = await _jobSkillRepository.GetSkillsByJobIdAsync(id);
-            jopPost.JobSkills = jobSkills.ToList();
-            return _mapper.Map<JobPostResponseDto>(jopPost);
+            JobPost.JobSkills = jobSkills.ToList();
+            return _mapper.Map<JobPostResponseDto>(JobPost);
         }
 
         public async Task<ICollection<JobPostResponseDto>> GetJobPostForHrAsync(int hrid)
@@ -147,6 +147,11 @@ namespace HireAI.Service.Services
             //update job post
             await  _jobPostRepository.UpdateAsync(existing);
 
+        }
+
+        public async Task<int> GetTotalApplicationsByJobIdAsync(int jobId)
+        {
+            return await _jobPostRepository.GetTotalApplicationsByJobIdAsync(jobId);
         }
     }
 }

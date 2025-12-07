@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
     
 using HireAI.Data.Models;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
 using HireAI.Data.Helpers.Enums;
 
 namespace HireAI.Service.Services

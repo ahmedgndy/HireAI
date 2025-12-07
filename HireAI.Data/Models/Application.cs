@@ -6,7 +6,7 @@ namespace HireAI.Data.Models
     public  class Application
     {
         public int Id { get; set; }
-        public enApplicationStatus ApplicationStatus { get; set; }
+        public enApplicationStatus ApplicationStatus { get; set; } = enApplicationStatus.ATSPassed;
         public DateTime DateApplied { get; set; } = DateTime.UtcNow;
         public string? CVFilePath { get; set; }
         public float? AtsScore { get; set; }

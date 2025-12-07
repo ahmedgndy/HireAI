@@ -36,7 +36,7 @@ namespace HireAI.Data.Helpers.DTOs.Authentication
         [StringLength(100)]
         public string? CompanyDescription { get; set; }
 
-        [Phone(ErrorMessage = "Invalid phone number format")]
+        [StringLength(100)]
         public string? Phone { get; set; }
 
         [Required(ErrorMessage = "Date of Birth is required")]

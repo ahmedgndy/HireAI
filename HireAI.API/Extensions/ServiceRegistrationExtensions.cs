@@ -17,11 +17,12 @@ namespace HireAI.API.Extensions
             services.AddScoped<MockExamService>();
             services.AddScoped<IHRService, HRService>();
             services.AddScoped<IExamService, ExamService>();
-            services.AddScoped<IJobPostService, JopPostService>();
+            services.AddScoped<IJobPostService, JobPostService>();
             services.AddScoped<IHrDashboardService, HRDashboardService>();
             services.AddScoped<IApplicantService, ApplicantService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IApplicationService, ApplicationService>();
 
             return services;
         }

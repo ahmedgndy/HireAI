@@ -13,5 +13,6 @@ namespace HireAI.Data.DTOs.ApplicantDashboard
         public DateTime AppliedAt { get; set; } = DateTime.UtcNow;
         public float? AtsScore { get; set; }
         public string ApplicationStatus { get; set; } = default!; // Changed from enApplicationStatus to string
+        public string? JobType { get; set; } // Added JobType property (FullTime, PartTime, Internship, FreeLance)
     }
 }

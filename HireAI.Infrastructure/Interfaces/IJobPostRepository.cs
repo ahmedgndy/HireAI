@@ -5,6 +5,8 @@ namespace HireAI.Infrastructure.GenericBase
 {
     public interface IJobPostRepository : IGenericRepositoryAsync<JobPost> {
                      
-        public Task<ICollection<JobPost>?>  GetJobPostForHrAsync(int hrid); 
+        public Task<ICollection<JobPost>?>  GetJobPostForHrAsync(int hrid);
+        public Task<int> GetTotalApplicationsByJobIdAsync(int jobId);
+
     }
 }

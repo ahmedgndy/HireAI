@@ -35,7 +35,7 @@ namespace HireAI.Data.Configurations
               v => v.ToString(),// Converts the enum to string when saving to the database                  
              v => (enApplicationStatus)Enum.Parse(typeof(enApplicationStatus), v)// Converts the string back to enum when reading from the database
               )
-             .HasDefaultValue(enApplicationStatus.UnderReview);
+             .HasDefaultValue(enApplicationStatus.ATSPassed);
 
             builder.Property(a => a.ExamStatus)
             .HasConversion(

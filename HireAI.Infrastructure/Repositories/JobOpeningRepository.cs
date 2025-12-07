@@ -29,6 +29,13 @@ namespace HireAI.Infrastructure.Repositories
 
         }
 
-       
+        public async Task<int> GetTotalApplicationsByJobIdAsync(int jobId)
+        {
+            return await _context.Applications
+                .Where(app => app.JobId == jobId)
+                .CountAsync();
+        }
+
+
     }
 }
