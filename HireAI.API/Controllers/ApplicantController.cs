@@ -155,5 +155,98 @@ namespace HireAI.API.Controllers
             // return Ok(resumeUrl); // or whatever is appropriate
             return Ok(resumeUrl);
         }
+
+        /// <summary>
+        /// Download a resume file from S3 by file key
+        /// Usage: GET /api/applicant/DownloadResume?fileKey=cv/1139f78b-58d4-40ae-ae91-9a1d8d897c7f_ahmed_Egndy_cv%20(8).pdf
+        /// </summary>
+        [HttpGet("DownloadResume")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DownloadResumeAsync([FromQuery] string fileKey)
+        {
+            if (string.IsNullOrWhiteSpace(fileKey))
+            {
+                return BadRequest(new { error = "File key cannot be empty." });
+            }
+
+            try
+            {
+                // Download file from S3 using the file key
+                var downloadDto = await _s3Service.DownloadFileAsync(fileKey);
+                
+                // Return file as download with appropriate content type
+                return File(downloadDto.FileStream, downloadDto.ContentType ?? "application/octet-stream", downloadDto.FileName);
+            }
+            catch (FileNotFoundException)
+            {
+                return NotFound(new { error = "File not found in S3." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"Failed to download file: {ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// Download a resume file from S3 using the full S3 URL
+        /// Usage: GET /api/applicant/DownloadResumeByUrl?s3Url=https://hireaibucket.s3.us-east-1.amazonaws.com/cv/1139f78b-58d4-40ae-ae91-9a1d8d897c7f_ahmed_Egndy_cv%20(8).pdf
+        /// </summary>
+        [HttpGet("DownloadResumeByUrl")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DownloadResumeByUrlAsync([FromQuery] string s3Url)
+        {
+            if (string.IsNullOrWhiteSpace(s3Url))
+            {
+                return BadRequest(new { error = "S3 URL cannot be empty." });
+            }
+
+            try
+            {
+                // Extract file key from the S3 URL
+                var fileKey = ExtractFileKeyFromUrl(s3Url);
+
+                if (string.IsNullOrWhiteSpace(fileKey))
+                {
+                    return BadRequest(new { error = "Invalid S3 URL format." });
+                }
+
+                // Download file from S3
+                var downloadDto = await _s3Service.DownloadFileAsync(fileKey);
+                
+                // Return file as download
+                return File(downloadDto.FileStream, downloadDto.ContentType ?? "application/octet-stream", downloadDto.FileName);
+            }
+            catch (FileNotFoundException)
+            {
+                return NotFound(new { error = "File not found in S3." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = $"Failed to download file: {ex.Message}" });
+            }
+        }
+
+        /// <summary>
+        /// Extracts the file key from an S3 URL
+        /// Example Input: https://hireaibucket.s3.us-east-1.amazonaws.com/cv/1139f78b-58d4-40ae-ae91-9a1d8d897c7f_ahmed_Egndy_cv%20(8).pdf
+        /// Example Output: cv/1139f78b-58d4-40ae-ae91-9a1d8d897c7f_ahmed_Egndy_cv%20(8).pdf
+        /// </summary>
+        private string ExtractFileKeyFromUrl(string s3Url)
+        {
+            try
+            {
+                var uri = new Uri(s3Url);
+                var fileKey = uri.AbsolutePath.TrimStart('/');
+                return fileKey;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

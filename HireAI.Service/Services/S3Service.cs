@@ -2,6 +2,7 @@
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using HireAI.Service.Interfaces;
+using HireAI.Data.Helpers.DTOs.S3;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,17 @@ namespace HireAI.Service.Services
     {
         private readonly IAmazonS3 _s3;
         private readonly string _bucketName = "hireaibucket"; 
-        private  readonly string _region = "us-east-1";
-        public S3Service(IAmazonS3 s3) {
+        private readonly string _region = "us-east-1";
+
+        public S3Service(IAmazonS3 s3)
+        {
             _s3 = s3;
         }
+
+        /// <summary>
+        /// Upload a file to S3 bucket
+        /// Returns the S3 key (not the full URL)
+        /// </summary>
         public async Task<string> UploadFileAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -27,27 +35,31 @@ namespace HireAI.Service.Services
                 throw new ArgumentException("File is null or empty", nameof(file));
             }
 
-            var  key = $"cv/{Guid.NewGuid()}_{file.FileName}";
+            var key = $"cv/{Guid.NewGuid()}_{file.FileName}";
 
-           using var stream = file.OpenReadStream();    
+            using var stream = file.OpenReadStream();    
            
-           var transferUtility = new TransferUtility(_s3);
+            var transferUtility = new TransferUtility(_s3);
 
-           var transferRequest = new TransferUtilityUploadRequest
-           {
-               InputStream = stream,
-               Key = key,
-               BucketName = _bucketName,
-               ContentType = file.ContentType
-           };
+            var transferRequest = new TransferUtilityUploadRequest
+            {
+                InputStream = stream,
+                Key = key,
+                BucketName = _bucketName,
+                ContentType = file.ContentType
+            };
 
-          await transferUtility.UploadAsync(transferRequest);
+            await transferUtility.UploadAsync(transferRequest);
 
-          var url = $"https://{_bucketName}.s3.{_region}.amazonaws.com/{key}";
-          return url;
+            return key;
         }
 
-        public async Task<(Stream FileStream, string ContentType, string FileName)> DownloadFileAsync(string key)
+        /// <summary>
+        /// Download a file from S3 as a stream
+        /// Used for direct download to device/client
+        /// Returns the response stream directly from S3
+        /// </summary>
+        public async Task<FileDownloadDto> DownloadFileAsync(string key)
         {
             if (string.IsNullOrWhiteSpace(key))
             {
@@ -63,7 +75,47 @@ namespace HireAI.Service.Services
             var response = await _s3.GetObjectAsync(getObjectRequest);
 
             var fileName = Path.GetFileName(key);
-            return (response.ResponseStream, response.Headers.ContentType, fileName);
+            
+            return new FileDownloadDto
+            {
+                FileStream = response.ResponseStream,
+                ContentType = response.Headers.ContentType,
+                FileName = fileName
+            };
+        }
+
+        /// <summary>
+        /// Download a file from S3 into memory as byte array
+        /// Useful for processing files without writing to disk
+        /// </summary>
+        public async Task<FileDownloadMemoryDto> DownloadFileToMemoryAsync(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentException("Key cannot be null or empty", nameof(key));
+            }
+
+            var getObjectRequest = new GetObjectRequest
+            {
+                BucketName = _bucketName,
+                Key = key
+            };
+
+            var response = await _s3.GetObjectAsync(getObjectRequest);
+
+            // Read the stream into memory
+            using var memoryStream = new MemoryStream();
+            await response.ResponseStream.CopyToAsync(memoryStream);
+            var fileContent = memoryStream.ToArray();
+
+            var fileName = Path.GetFileName(key);
+            
+            return new FileDownloadMemoryDto
+            {
+                FileContent = fileContent,
+                ContentType = response.Headers.ContentType,
+                FileName = fileName
+            };
         }
     }
 }
