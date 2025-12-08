@@ -10,6 +10,7 @@ namespace HireAI.Data.DTOs
 {
     public class JobOpeningDTO
     {
+        public int JobId { get; set; }
         public string Title { get; set; } = null!;
         public string CompanyName { get; set; } = default!;
         public string? Description { get; set; }

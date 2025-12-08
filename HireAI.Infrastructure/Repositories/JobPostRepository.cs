@@ -1,5 +1,4 @@
 using HireAI.Data.Helpers.DTOs.Applicant.response;
-using HireAI.Data.Helpers.DTOs.ReportDtos.resposnes;
 using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
@@ -7,17 +6,16 @@ using HireAI.Infrastructure.GenaricBasies;
 using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Intrefaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System.Threading;
 
 namespace HireAI.Infrastructure.Repositories
 {
     public class JobPostRepository : GenericRepositoryAsync<JobPost>, IJobPostRepository
     {
         private readonly IApplicationRepository _applicationRepository;
-        public JobPostRepository(HireAIDbContext db ,IApplicationRepository applicationRepository
-            ) : base(db) { 
-                _applicationRepository = applicationRepository;
+
+        public JobPostRepository(HireAIDbContext db ,IApplicationRepository applicationRepository) : base(db)
+        { 
+            _applicationRepository = applicationRepository;
         }
 
         public async Task<ICollection<JobPost>?> GetJobPostForHrAsync(int hrid)
@@ -71,6 +69,13 @@ namespace HireAI.Infrastructure.Repositories
                                ).CountAsync();
 
             
+        }
+
+        public async Task<int> GetTotalApplicationsByJobIdAsync(int jobId)
+        {
+            return await _context.Applications
+                .Where(app => app.JobId == jobId)
+                .CountAsync();
         }
 
     }

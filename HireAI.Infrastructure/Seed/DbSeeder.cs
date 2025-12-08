@@ -13,7 +13,7 @@ namespace HireAI.Seeder
 {
     public static class DbSeeder
     {
-        public static async Task SeedAsync(IServiceProvider services)
+        public static async Task SeedAsync(IServiceProvider services, bool forceReseed = false)
         {
             using var scope = services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<HireAIDbContext>();
@@ -28,9 +28,75 @@ namespace HireAI.Seeder
                 // Ignore migration errors
             }
 
-            // If already seeded, exit
-            if (await context.JobPosts.AnyAsync() || await context.Applicants.AnyAsync())
+            // If already seeded and not forcing reseed, exit
+            if (!forceReseed && (await context.JobPosts.AnyAsync() || await context.Applicants.AnyAsync()))
                 return;
+
+            // If forcing reseed, clear existing data first
+            if (forceReseed)
+            {
+                // Clear in reverse dependency order
+                context.QuestionEvaluations.RemoveRange(context.QuestionEvaluations);
+                context.ApplicantResponses.RemoveRange(context.ApplicantResponses);
+                context.ExamEvaluations.RemoveRange(context.ExamEvaluations);
+                context.ExamSummarys.RemoveRange(context.ExamSummarys);
+                context.Answers.RemoveRange(context.Answers);
+                context.Questions.RemoveRange(context.Questions);
+                context.Exams.RemoveRange(context.Exams);
+                context.Applications.RemoveRange(context.Applications);
+                context.ApplicantSkills.RemoveRange(context.ApplicantSkills);
+                context.CVs.RemoveRange(context.CVs);
+                context.Applicants.RemoveRange(context.Applicants);
+                context.JobSkills.RemoveRange(context.JobSkills);
+                context.Skills.RemoveRange(context.Skills);
+                context.JobPosts.RemoveRange(context.JobPosts);
+                context.HRs.RemoveRange(context.HRs);
+                await context.SaveChangesAsync();
+            }
+
+            // If forcing reseed, clear existing data first
+            if (forceReseed)
+            {
+                // Clear in reverse dependency order
+                context.QuestionEvaluations.RemoveRange(context.QuestionEvaluations);
+                context.ApplicantResponses.RemoveRange(context.ApplicantResponses);
+                context.ExamEvaluations.RemoveRange(context.ExamEvaluations);
+                context.ExamSummarys.RemoveRange(context.ExamSummarys);
+                context.Answers.RemoveRange(context.Answers);
+                context.Questions.RemoveRange(context.Questions);
+                context.Exams.RemoveRange(context.Exams);
+                context.Applications.RemoveRange(context.Applications);
+                context.ApplicantSkills.RemoveRange(context.ApplicantSkills);
+                context.CVs.RemoveRange(context.CVs);
+                context.Applicants.RemoveRange(context.Applicants);
+                context.JobSkills.RemoveRange(context.JobSkills);
+                context.Skills.RemoveRange(context.Skills);
+                context.JobPosts.RemoveRange(context.JobPosts);
+                context.HRs.RemoveRange(context.HRs);
+                await context.SaveChangesAsync();
+            }
+
+            // If forcing reseed, clear existing data first
+            if (forceReseed)
+            {
+                // Clear in reverse dependency order
+                context.QuestionEvaluations.RemoveRange(context.QuestionEvaluations);
+                context.ApplicantResponses.RemoveRange(context.ApplicantResponses);
+                context.ExamEvaluations.RemoveRange(context.ExamEvaluations);
+                context.ExamSummarys.RemoveRange(context.ExamSummarys);
+                context.Answers.RemoveRange(context.Answers);
+                context.Questions.RemoveRange(context.Questions);
+                context.Exams.RemoveRange(context.Exams);
+                context.Applications.RemoveRange(context.Applications);
+                context.ApplicantSkills.RemoveRange(context.ApplicantSkills);
+                context.CVs.RemoveRange(context.CVs);
+                context.Applicants.RemoveRange(context.Applicants);
+                context.JobSkills.RemoveRange(context.JobSkills);
+                context.Skills.RemoveRange(context.Skills);
+                context.JobPosts.RemoveRange(context.JobPosts);
+                context.HRs.RemoveRange(context.HRs);
+                await context.SaveChangesAsync();
+            }
 
             var rnd = new Random();
 
@@ -80,8 +146,8 @@ namespace HireAI.Seeder
             context.JobSkills.AddRange(jobSkills);
             await context.SaveChangesAsync();
 
-            // ======== Create many Applicants (1000) ========
-            const int applicantCount = 1000;
+            // ======== Create many Applicants (100) ========
+            const int applicantCount = 100;
             var applicants = new List<Applicant>(applicantCount);
             for (int i = 1; i <= applicantCount; i++)
             {
@@ -178,13 +244,12 @@ namespace HireAI.Seeder
             await context.SaveChangesAsync();
 
             // Link exam ids back to applications (one-to-one) and create summaries and questions
-            int qCounter = 0;
-            foreach (var ex in exams)
+            var completedApps = applications.Where(a => a.ExamStatus == enExamStatus.Completed).ToList();
+            for (int i = 0; i < exams.Count; i++)
             {
-                // update corresponding application
-                var relatedApp = applications.First(a => a.ExamId == ex.Id);
+                var ex = exams[i];
+                var relatedApp = completedApps[i];
                 relatedApp.ExamId = ex.Id;
-                context.Applications.Update(relatedApp);
 
                 // Create summary
                 var summary = new ExamSummary
@@ -200,7 +265,6 @@ namespace HireAI.Seeder
                 int qCount = Math.Max(3, ex.NumberOfQuestions);
                 for (int q = 1; q <= qCount; q++)
                 {
-                    qCounter++;
                     var question = new Question
                     {
                         ExamId = ex.Id,
@@ -210,6 +274,7 @@ namespace HireAI.Seeder
                     questions.Add(question);
                 }
             }
+            context.Applications.UpdateRange(completedApps);
             context.ExamSummarys.AddRange(summaries);
             context.Questions.AddRange(questions);
             await context.SaveChangesAsync();
@@ -323,7 +388,7 @@ namespace HireAI.Seeder
                 var skill = skills[rnd.Next(skills.Count)];
                 applicantSkills.Add(new ApplicantSkill
                 {
-                    ApplicantId = a.Id,
+                    ApplicantId = a.Id,     
                     SkillId = skill.Id,
                     SkillRate = rnd.Next(50, 101)
                 });

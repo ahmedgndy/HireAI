@@ -42,22 +42,20 @@ namespace HireAI.API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("HireAiDB"));
             });
 
-            #region a
+            #region Register Identity, Repositories, and Services
 
+            //REGISTER ApplicationUser and IdentityRole with the DI Container
             // Register Identity
             builder.Services.AddApplicationIdentity();
-            //REGISTER ApplicationUser and IdentityRole with the DI Container
-    
-
 
             // Register repositories and services using extension methods
             builder.Services.AddApplicationRepositories();
             builder.Services.AddApplicationServices();
             #endregion
 
-            // Add AutoMapper service
+            #region Add AutoMapper service
             builder.Services.AddAutoMapper(cfg => { }, typeof(ApplicationProfile).Assembly);
-
+            #endregion
 
             // Configure AWS S3 with credentials from appsettings
             var awsAccessKey = builder.Configuration["AWS:AccessKey"];

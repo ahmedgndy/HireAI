@@ -45,7 +45,7 @@ namespace HireAI.Service.Services
                 MonthlyApplicants = await GetMonthlyNumberOfApplicationsAsync(hrId),
                 ATSPassedRateMonthly = await GetMonthlyOfTotalATSPassedAsync(hrId),
                 RecentApplications = await GetRecentApplicantsAsync(hrId),
-                ActiveJopPostings = await GetActiveJobPostingsAsync(hrId)
+                ActiveJobPostings = await GetActiveJobPostingsAsync(hrId)
             };
         }
 
@@ -115,11 +115,11 @@ namespace HireAI.Service.Services
                 .ToListAsync();
         }
 
-        public async Task<List<ActiveJopPosting>> GetActiveJobPostingsAsync(int hrId)
+        public async Task<List<ActiveJobPosting>> GetActiveJobPostingsAsync(int hrId)
         {
             return await _JobPostRepository.GetAll()
                 .Where(j => j.HRId == hrId && j.JobStatus == enJobStatus.Active)
-                .Select(j => new ActiveJopPosting
+                .Select(j => new ActiveJobPosting
                 {
                     JobTitle = j.Title,
                     ApplicationTotalCount = j.Applications.Count,

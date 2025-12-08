@@ -4,7 +4,6 @@ using Amazon.S3;
 using HireAI.Service.Services;
 
 using HireAI.Service.Interfaces;
-using HireAI.Service.Services;
 
 
 namespace HireAI.API.Extensions
@@ -22,7 +21,7 @@ namespace HireAI.API.Extensions
             services.AddScoped<MockExamService>();
             services.AddScoped<IHRService, HRService>();
             services.AddScoped<IExamService, ExamService>();
-            services.AddScoped<IJobPostService, JopPostService>();
+            services.AddScoped<IJobPostService, JobPostService>();
             services.AddScoped<IHrDashboardService, HRDashboardService>();
             services.AddScoped<IS3Service, S3Service>();
             services.AddScoped<IReportPdfService, ReportPdfService>();
@@ -30,6 +29,8 @@ namespace HireAI.API.Extensions
 
             services.AddScoped<IApplicantService, ApplicantService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IApplicationService, ApplicationService>();
 
             return services;
         }

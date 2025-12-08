@@ -2,15 +2,14 @@
 using HireAI.Data.DTOs;
 using HireAI.Data.DTOs.ApplicantDashboard;
 using HireAI.Data.Helpers.DTOs.ApplicantApplication;
-using HireAI.Data.Helpers.Enums;
+using HireAI.Data.Helpers.DTOs.Application;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Request;
 using HireAI.Data.Helpers.DTOs.ExamDTOS.Respones;
 using HireAI.Data.Helpers.DTOs.ExamResponseDTOS.Request;
-
 using HireAI.Data.Helpers.DTOs.HRDTOS;
-
-using HireAI.Data.Helpers.DTOs.JopOpening.Request;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpening.Request;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 
 namespace HireAI.Infrastructure.Mappings
@@ -33,7 +32,8 @@ namespace HireAI.Infrastructure.Mappings
                 .ForMember(dest => dest.CompanyLocation, opt => opt.MapFrom(src => src.AppliedJob!.Location))
                 .ForMember(dest => dest.AppliedAt, opt => opt.MapFrom(src => src.DateApplied))
                 .ForMember(dest => dest.AtsScore, opt => opt.MapFrom(src => src.AtsScore))
-                .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.ApplicationStatus.ToString())); // Convert enum to string
+                .ForMember(dest => dest.ApplicationStatus, opt => opt.MapFrom(src => src.ApplicationStatus.ToString())) // Convert enum to string
+                .ForMember(dest => dest.JobType, opt => opt.MapFrom(src => src.AppliedJob!.EmploymentType != null ? src.AppliedJob.EmploymentType.ToString() : null)); // Map JobType from EmploymentType
 
             CreateMap<Exam, ExamResponseDTO>();
             CreateMap<Question, QuestionResponseDTO>();
@@ -44,15 +44,29 @@ namespace HireAI.Infrastructure.Mappings
             CreateMap<QuestionRequestDTO, Question>();
             CreateMap<AnswerRequestDTO, Answer>();
 
+            // CreateApplicationDto -> Application
+            CreateMap<CreateApplicationDto, Application>()
+                .ForMember(dest => dest.DateApplied, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(dest => dest.ExamStatus, opt => opt.MapFrom(_ => enExamStatus.NotTaken));
 
+            // UpdateApplicationDto -> Application
+            CreateMap<UpdateApplicationDto, Application>()
+                .ForMember(dest => dest.DateApplied, opt => opt.Ignore())
+                .ForMember(dest => dest.ApplicantId, opt => opt.Ignore()) 
+                .ForMember(dest => dest.JobId, opt => opt.Ignore())
+                .ForMember(dest => dest.HRId, opt => opt.Ignore());
 
+            // Application -> ApplicationResponseDto
+            CreateMap<Application, ApplicationResponseDto>()
+                .ForMember(dest => dest.ApplicantName, opt => opt.MapFrom(src => src.Applicant != null ? src.Applicant.FullName : null))
+                .ForMember(dest => dest.JobTitle, opt => opt.MapFrom(src => src.AppliedJob != null ? src.AppliedJob.Title : null))
+                .ForMember(dest => dest.HRName, opt => opt.MapFrom(src => src.HR != null ? src.HR.FullName : null));
+        
 
-            CreateMap<JobPostRequestDto, JobPost>();
+        CreateMap<JobPostRequestDto, JobPost>();
 
             // POST / PUT mapping
             CreateMap<JobPostRequestDto, JobPost>();
-
-
 
             CreateMap<HR, HRResponseDto>();
 

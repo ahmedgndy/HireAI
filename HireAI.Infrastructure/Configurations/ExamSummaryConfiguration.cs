@@ -19,18 +19,18 @@ namespace HireAI.Data.Configurations
             builder.HasOne(es => es.Application)
                 .WithOne(a => a.ExamSummary)
                 .HasForeignKey<ExamSummary>(es => es.ApplicationId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(es => es.Exam)
                 .WithMany()
                 .HasForeignKey(es => es.ExamId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(es => es.ExamEvaluation)
                 .WithOne(ee => ee.ExamSummary)
                 .HasForeignKey<ExamSummary>(es => es.ExamEvaluationId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Indexes
             builder.HasIndex(es => es.ApplicationId)

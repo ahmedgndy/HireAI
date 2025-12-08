@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace HireAI.Data.Helpers.DTOs.JopOpening.Request
+namespace HireAI.Data.Helpers.DTOs.JobOpening.Request
 {
     /// <summary>
     /// DTO used to create a 

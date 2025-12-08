@@ -1,5 +1,6 @@
-﻿using HireAI.Data.Helpers.DTOs.JopOpening.Request;
+﻿using HireAI.Data.Helpers.DTOs.JobOpening.Request;
 using HireAI.Service.Interfaces;
+using HireAI.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,45 +9,53 @@ namespace HireAI.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "HR,Applicant")]
-    public class JopController : ControllerBase
+    public class JobController : ControllerBase
     {
-        private readonly IJobPostService _jopPostService;
-        public JopController(IJobPostService jobPostService)
+        private readonly IJobPostService _JobPostService;
+        public JobController(IJobPostService jobPostService)
         {
 
-            _jopPostService = jobPostService;
+            _JobPostService = jobPostService;
         }
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetJopOppenAsny(int id)
+        public async Task<IActionResult> GetJobOppenAsny(int id)
         {
-            var result = await _jopPostService.GetJobPostAsync(id);
+            var result = await _JobPostService.GetJobPostAsync(id);
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddJopOppenAsny([FromBody] JobPostRequestDto jopOpeingRequestDto)
+        public async Task<IActionResult> AddJobOppenAsny([FromBody] JobPostRequestDto JobOpeingRequestDto)
         {
-            await _jopPostService.CreateJobPostAsync(jopOpeingRequestDto);
+            await _JobPostService.CreateJobPostAsync(JobOpeingRequestDto);
             return Ok();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteJopOppenAsny(int id)
+        public async Task<IActionResult> DeleteJobOppenAsny(int id)
         {
-            await _jopPostService.DeleteJobPostAsync(id);
+            await _JobPostService.DeleteJobPostAsync(id);
             return Ok();
         }
 
         [HttpGet("hr/{hrid}")]
-        public async Task<IActionResult> GetJopOpeningForHrAsync(int hrid)
+        public async Task<IActionResult> GetJobOpeningForHrAsync(int hrid)
         {
-            var result = await _jopPostService.GetJobPostForHrAsync(hrid);
+            var result = await _JobPostService.GetJobPostForHrAsync(hrid);
             return Ok(result);
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateJopOppenAsny(int id, [FromBody] Data.Helpers.DTOs.JopOpening.Request.JobPostRequestDto jopOpeingRequestDto)
+        public async Task<IActionResult> UpdateJobOppenAsny(int id, [FromBody] Data.Helpers.DTOs.JobOpening.Request.JobPostRequestDto JobOpeingRequestDto)
         {
-            await _jopPostService.UpdateJobPostAsync(id, jopOpeingRequestDto);
+            await _JobPostService.UpdateJobPostAsync(id, JobOpeingRequestDto);
             return Ok();
+        }
+
+        [HttpGet("{jobId}/applications-count")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetTotalApplicationsByJobIdAsync(int jobId)
+        {
+            var count = await _JobPostService.GetTotalApplicationsByJobIdAsync(jobId);
+            return Ok(new { jobId, totalApplications = count });
         }
     }
 }

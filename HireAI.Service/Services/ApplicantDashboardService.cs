@@ -43,7 +43,8 @@ namespace HireAI.Service.Services
             .CountAsync(a =>
                 a.ApplicantId == applicantId &&
                 (a.ApplicationStatus == enApplicationStatus.UnderReview ||
-                 a.ApplicationStatus == enApplicationStatus.UnderReview));
+                 a.ApplicationStatus == enApplicationStatus.ExamSent ||
+                 a.ApplicationStatus == enApplicationStatus.ATSPassed));
         }
 
         public async Task<int> GetMockExamsTakenNumberPerApplicantAsync(int applicantId)

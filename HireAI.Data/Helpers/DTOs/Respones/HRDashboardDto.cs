@@ -19,6 +19,6 @@ namespace HireAI.Data.Helpers.DTOs.Respones.HRDashboardDto
         public Dictionary<(int,int), float> ExamScoreDistribution { get; set; } = new Dictionary<(int,int), float>(); //Performance breakdown by score range
 
         public List<RecentApplicationDto> RecentApplications { get; set; } = new List<RecentApplicationDto>();
-        public List<ActiveJopPosting> ActiveJopPostings { get; set; } = new List<ActiveJopPosting>();
+        public List<ActiveJobPosting> ActiveJobPostings { get; set; } = new List<ActiveJobPosting>();
     }
 }

@@ -29,16 +29,14 @@ namespace HireAI.API.Extensions
                         logger.LogInformation("No pending migrations.");
                     }
 
-                    // Call your seed method here
-                    await DbSeeder.SeedAsync(services);
+                    // Pass the ROOT service provider (app.Services), not the scoped one
+                    await DbSeeder.SeedAsync(app.Services);
                     logger.LogInformation("Database seeding finished.");
                 }
                 catch (Exception ex)
                 {
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred while migrating or seeding the database.");
-                    // In production you might rethrow or stop startup depending on policy.
-                    // throw;
                 }
             }
         }

@@ -1,8 +1,8 @@
 using AutoMapper;
 using HireAI.Data.Helpers.DTOs.JobPostDtos;
-using HireAI.Data.Helpers.DTOs.JopOpening.Request;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
-using HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JopOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpening.Request;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
+using HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response.HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response;
 using HireAI.Data.Helpers.DTOs.SkillDtos;
 using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
@@ -100,6 +100,7 @@ namespace HireAI.Service.Mapping
             // ==================== JOB OPENING DTO MAPPINGS ====================
             // JobPost -> JobOpeningDTO (Public job listing view with enums as strings)
             CreateMap<JobPost, JobOpeningDTO>()
+                .ForMember(dest => dest.JobId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.CompanyName))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
