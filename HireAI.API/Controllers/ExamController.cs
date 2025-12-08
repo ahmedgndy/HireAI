@@ -108,5 +108,59 @@ namespace HireAI.API.Controllers
             await _examService.DeleteExamAsync(examId);
             return Ok();
         }
+
+        /// <summary>
+        /// Creates a job exam with AI-generated questions based on the job description
+        /// </summary>
+        /// <param name="applicationId">The application ID to create the exam for</param>
+        /// <returns>List of generated questions</returns>
+        [HttpPost("JobExamByAI/{applicationId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CreateJobExamAsync(int applicationId)
+        {
+            try
+            {
+                var questions = await _examService.CreateJobExamAsync(applicationId);
+                return Ok(new
+                {
+                    message = "Job exam created successfully with AI-generated questions",
+                    questionCount = questions.Count,
+                    questions = questions
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Creates a mock exam with AI-generated questions based on the exam description
+        /// </summary>
+        /// <param name="examId">The exam ID to generate questions for</param>
+        /// <returns>List of generated questions</returns>
+        [HttpPost("MockExamByAI/{examId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CreateMockExamAsync(int examId)
+        {
+            try
+            {
+                var questions = await _examService.CreateMockExamAsync(examId);
+                return Ok(new
+                {
+                    message = "Mock exam questions generated successfully",
+                    questionCount = questions.Count,
+                    questions = questions
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

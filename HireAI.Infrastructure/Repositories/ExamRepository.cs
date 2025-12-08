@@ -1,3 +1,4 @@
+using HireAI.Data.Helpers.Enums;
 using HireAI.Data.Models;
 using HireAI.Infrastructure.Context;
 using HireAI.Infrastructure.GenaricBasies;
@@ -10,7 +11,13 @@ namespace HireAI.Infrastructure.Repositories
     {
         public ExamRepository(HireAIDbContext db) : base(db) { }
 
-       
+        // Override to include Questions navigation property
+        public override async Task<Exam?> GetByIdAsync(int id)
+        {
+            return await _dbSet
+                .Include(e => e.Questions)
+                .FirstOrDefaultAsync(e => e.Id == id);
+        }
 
         //Get Exam by Applicant Id with Questions and Answers
         public async Task<Exam?> GetExamByApplicanIdAsync(int id)
@@ -40,6 +47,14 @@ namespace HireAI.Infrastructure.Repositories
             await _dbSet.AddAsync(exam);
             await _context.SaveChangesAsync();
             
+        }
+
+        public async Task<Exam?> GetExamByJobIdAsync(int jobId)
+        {
+            return await _dbSet
+                .Include(e => e.Questions)
+                .Where(e => e.Applications.Any(a => a.JobId == jobId) && e.ExamType == enExamType.HrExam)
+                .FirstOrDefaultAsync();
         }
     }
 }

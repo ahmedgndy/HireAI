@@ -13,17 +13,22 @@ namespace HireAI.Data.Configurations
             builder.Property(a => a.Id)
                .ValueGeneratedOnAdd();
 
-
             builder.Property(q => q.QuestionText)
-                .HasMaxLength(200);
+                .HasMaxLength(1000);  // Increased for AI-generated questions
+
+            // Store Choices array as delimited string in database
+            builder.Property(q => q.Choices)
+                .HasConversion(
+                    v => string.Join("|||", v),
+                    v => v.Split("|||", StringSplitOptions.None)
+                )
+                .HasMaxLength(2000);
 
             // Foreign Keys
             builder.HasOne(q => q.Exam)
                 .WithMany(e => e.Questions)
                 .HasForeignKey(q => q.ExamId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            
 
             // Indexes
             builder.HasIndex(q => new { q.ExamId, q.QuestionNumber })
