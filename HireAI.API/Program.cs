@@ -34,6 +34,9 @@ namespace HireAI.API
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
             builder.Services.AddSwaggerGen();
+            
+            // Add HttpClient for Gemini API
+            builder.Services.AddHttpClient();
 
             // Register DbContext
             builder.Services.AddDbContext<HireAIDbContext>(options =>
@@ -136,14 +139,14 @@ namespace HireAI.API
             #region Swagger Setting to enable adding token
             builder.Services.AddSwaggerGen(swagger =>
             {
-                //This is to generate the Default UI of Swagger Documentation    
+                //Thisï¿½isï¿½toï¿½generateï¿½theï¿½Defaultï¿½UIï¿½ofï¿½Swaggerï¿½Documentationï¿½ï¿½ï¿½ï¿½
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "ASP.NET 8 Web API",
+                    Title = "ASP.NETï¿½8ï¿½Webï¿½API",
                     Description = " ITI Projrcy"
                 });
-                // To Enable authorization using Swagger (JWT)    
+                //ï¿½Toï¿½Enableï¿½authorizationï¿½usingï¿½Swaggerï¿½(JWT)ï¿½ï¿½ï¿½ï¿½
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -151,7 +154,7 @@ namespace HireAI.API
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                    Description = "Enterï¿½'Bearer'ï¿½[space]ï¿½andï¿½thenï¿½yourï¿½validï¿½tokenï¿½inï¿½theï¿½textï¿½inputï¿½below.\r\n\r\nExample:ï¿½\"Bearerï¿½eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {

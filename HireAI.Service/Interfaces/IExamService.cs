@@ -20,5 +20,15 @@ namespace HireAI.Service.Interfaces
 
         public Task DeleteExamAsync(int examId);
 
+        /// <summary>
+        /// Creates a job exam with AI-generated questions based on the job description from the application
+        /// </summary>
+        public Task<List<QuestionResponseDTO>> CreateJobExamAsync(int applicationId);
+
+        /// <summary>
+        /// Creates a mock exam with AI-generated questions based on the exam description
+        /// </summary>
+        public Task<List<QuestionResponseDTO>> CreateMockExamAsync(int examId);
+
     }
 }

@@ -1,7 +1,5 @@
-
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,15 +7,15 @@ using System.Threading.Tasks;
 namespace HireAI.Data.Helpers.DTOs.S3
 {
     /// <summary>
-    /// DTO for file download response (stream-based)
-    /// Used for direct download to client/device
+    /// DTO for file download to memory response
+    /// Used for in-memory processing without disk I/O
     /// </summary>
-    public class FileDownloadDto
+    public class FileDownloadMemoryDto
     {
         /// <summary>
-        /// The file stream from S3
+        /// The complete file content as byte array
         /// </summary>
-        public Stream FileStream { get; set; }
+        public byte[] FileContent { get; set; }
 
         /// <summary>
         /// The MIME type of the file (e.g., "application/pdf")
@@ -28,6 +26,10 @@ namespace HireAI.Data.Helpers.DTOs.S3
         /// The original filename
         /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// File size in bytes
+        /// </summary>
+        public int FileSize => FileContent?.Length ?? 0;
     }
 }
-

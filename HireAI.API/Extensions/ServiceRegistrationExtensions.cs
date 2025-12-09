@@ -35,6 +35,7 @@ namespace HireAI.API.Extensions
 
             services.AddScoped<IJobDetailsService, JobDetailsService>();
 
+            services.AddScoped<IGeminiService, GeminiService>();
 
 
             return services;

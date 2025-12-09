@@ -28,53 +28,13 @@ namespace HireAI.Seeder
                 // Ignore migration errors
             }
 
+            // Seed mock exams if they don't exist (always check this)
+            await SeedMockExamsIfNeededAsync(context);
+
             // If already seeded and not forcing reseed, exit
-            if (!forceReseed && (await context.JobPosts.AnyAsync() || await context.Applicants.AnyAsync()))
+            // Check for specific seeded HR to avoid conflict with admin accounts
+            if (!forceReseed && await context.HRs.AnyAsync(h => h.Email == "hr1@example.com"))
                 return;
-
-            // If forcing reseed, clear existing data first
-            if (forceReseed)
-            {
-                // Clear in reverse dependency order
-                context.QuestionEvaluations.RemoveRange(context.QuestionEvaluations);
-                context.ApplicantResponses.RemoveRange(context.ApplicantResponses);
-                context.ExamEvaluations.RemoveRange(context.ExamEvaluations);
-                context.ExamSummarys.RemoveRange(context.ExamSummarys);
-                context.Answers.RemoveRange(context.Answers);
-                context.Questions.RemoveRange(context.Questions);
-                context.Exams.RemoveRange(context.Exams);
-                context.Applications.RemoveRange(context.Applications);
-                context.ApplicantSkills.RemoveRange(context.ApplicantSkills);
-                context.CVs.RemoveRange(context.CVs);
-                context.Applicants.RemoveRange(context.Applicants);
-                context.JobSkills.RemoveRange(context.JobSkills);
-                context.Skills.RemoveRange(context.Skills);
-                context.JobPosts.RemoveRange(context.JobPosts);
-                context.HRs.RemoveRange(context.HRs);
-                await context.SaveChangesAsync();
-            }
-
-            // If forcing reseed, clear existing data first
-            if (forceReseed)
-            {
-                // Clear in reverse dependency order
-                context.QuestionEvaluations.RemoveRange(context.QuestionEvaluations);
-                context.ApplicantResponses.RemoveRange(context.ApplicantResponses);
-                context.ExamEvaluations.RemoveRange(context.ExamEvaluations);
-                context.ExamSummarys.RemoveRange(context.ExamSummarys);
-                context.Answers.RemoveRange(context.Answers);
-                context.Questions.RemoveRange(context.Questions);
-                context.Exams.RemoveRange(context.Exams);
-                context.Applications.RemoveRange(context.Applications);
-                context.ApplicantSkills.RemoveRange(context.ApplicantSkills);
-                context.CVs.RemoveRange(context.CVs);
-                context.Applicants.RemoveRange(context.Applicants);
-                context.JobSkills.RemoveRange(context.JobSkills);
-                context.Skills.RemoveRange(context.Skills);
-                context.JobPosts.RemoveRange(context.JobPosts);
-                context.HRs.RemoveRange(context.HRs);
-                await context.SaveChangesAsync();
-            }
 
             // If forcing reseed, clear existing data first
             if (forceReseed)
@@ -217,22 +177,18 @@ namespace HireAI.Seeder
             context.Applications.AddRange(applications);
             await context.SaveChangesAsync();
 
-            // ======== Create Exams for completed applications and Questions/Answers ========
+            // ======== Create Exams for completed applications ========
             var exams = new List<Exam>();
             var summaries = new List<ExamSummary>();
-            var questions = new List<Question>();
-            var answers = new List<Answer>();
-            var applicantResponses = new List<ApplicantResponse>();
 
-            //int examCounter = 0;
             foreach (var appItem in applications.Where(a => a.ExamStatus == enExamStatus.Completed))
             {
                 var exam = new Exam
                 {
-                    ExamName = "test exam ",
-                    ExamDescription = "exam discriptions ",
+                    ExamName = "Job Application Exam",
+                    ExamDescription = "Technical assessment for job application",
                     ExamLevel = enExamLevel.Intermediate,
-                    ExamType = enExamType.MockExam,
+                    ExamType = enExamType.HrExam,
                     NumberOfQuestions = job.NumberOfQuestions ?? 5,
                     DurationInMinutes = job.ExamDurationMinutes ?? 30,
                     CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 90)),
@@ -243,7 +199,7 @@ namespace HireAI.Seeder
             context.Exams.AddRange(exams);
             await context.SaveChangesAsync();
 
-            // Link exam ids back to applications (one-to-one) and create summaries and questions
+            // Link exam ids back to applications (one-to-one) and create summaries
             var completedApps = applications.Where(a => a.ExamStatus == enExamStatus.Completed).ToList();
             for (int i = 0; i < exams.Count; i++)
             {
@@ -260,57 +216,9 @@ namespace HireAI.Seeder
                     ApplicantExamScore = (float)rnd.Next(50, 101)
                 };
                 summaries.Add(summary);
-
-                // Create questions for this exam (vary count)
-                int qCount = Math.Max(3, ex.NumberOfQuestions);
-                for (int q = 1; q <= qCount; q++)
-                {
-                    var question = new Question
-                    {
-                        ExamId = ex.Id,
-                        QuestionText = $"Question {q} for Exam {ex.Id}",
-                        QuestionNumber = q,
-                    };
-                    questions.Add(question);
-                }
             }
             context.Applications.UpdateRange(completedApps);
             context.ExamSummarys.AddRange(summaries);
-            context.Questions.AddRange(questions);
-            await context.SaveChangesAsync();
-
-            // Create answers for questions (4 answers each)
-            foreach (var q in questions)
-            {
-                for (int a = 1; a <= 4; a++)
-                {
-                    answers.Add(new Answer
-                    {
-                        QuestionId = q.Id,
-                        Text = $"Option {a} for Q{q.Id}",
-                        IsCorrect = (a == 1) // first option correct for seeded data
-                    });
-                }
-            }
-            context.Answers.AddRange(answers);
-            await context.SaveChangesAsync();
-
-            // Create ApplicantResponse rows for some summaries/questions to vary data
-            foreach (var s in summaries)
-            {
-                // take first few questions of the exam
-                var examQs = questions.Where(q => q.ExamId == s.ExamId).Take(3).ToList();
-                int answerNum = 1;
-                foreach (var q in examQs)
-                {
-                    applicantResponses.Add(new ApplicantResponse
-                    {
-                        ExamSummaryId = s.Id,
-                        QuestionId = q.Id,
-                    });
-                }
-            }
-            context.ApplicantResponses.AddRange(applicantResponses);
             await context.SaveChangesAsync();
 
             // ======== Create ExamEvaluations (one per some summaries) ========
@@ -354,33 +262,6 @@ namespace HireAI.Seeder
                 await context.SaveChangesAsync();
             }
 
-            // ======== Create QuestionEvaluations for some ApplicantResponses ========
-            var questionEvaluations = new List<QuestionEvaluation>();
-            foreach (var ar in applicantResponses)
-            {
-                // try find matching examEvaluation for this response's examSummary
-                var ev = examEvaluations.FirstOrDefault(x => x.ExamSummaryId == ar.ExamSummaryId);
-                if (ev == null) continue; // skip if no evaluation created
-
-                // create evaluation for some responses
-                if (rnd.NextDouble() > 0.4)
-                {
-                    var qEval = new QuestionEvaluation
-                    {
-                        ApplicantResponseId = ar.Id,
-                        ExamEvaluationId = ev.Id,
-                        Feedback = "Reviewed: auto-seed feedback",
-                        IsCorrect = rnd.NextDouble() > 0.3,
-                    };
-                    questionEvaluations.Add(qEval);
-                }
-            }
-            if (questionEvaluations.Any())
-            {
-                context.QuestionEvaluations.AddRange(questionEvaluations);
-                await context.SaveChangesAsync();
-            }
-
             // ======== Applicant Skills ========
             var applicantSkills = new List<ApplicantSkill>();
             foreach (var a in applicants)
@@ -397,6 +278,135 @@ namespace HireAI.Seeder
             await context.SaveChangesAsync();
 
 
+        }
+
+        /// <summary>
+        /// Seeds mock exams if they don't already exist in the database
+        /// </summary>
+        private static async Task SeedMockExamsIfNeededAsync(HireAIDbContext context)
+        {
+            // Check if mock exams already exist
+            if (await context.Exams.AnyAsync(e => e.ExamName == "C# Fundamentals" && e.ExamType == enExamType.MockExam))
+                return;
+
+            var rnd = new Random();
+
+            var mockExams = new List<Exam>
+            {
+                new Exam
+                {
+                    ExamName = "C# Fundamentals",
+                    ExamDescription = "Test your knowledge of C# programming fundamentals including variables, data types, control structures, loops, methods, classes, inheritance, polymorphism, interfaces, and exception handling.",
+                    ExamLevel = enExamLevel.Beginner,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 30,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "ASP.NET Core Web API",
+                    ExamDescription = "Evaluate your understanding of ASP.NET Core Web API development including RESTful services, controllers, routing, middleware, dependency injection, authentication, authorization, and Entity Framework Core.",
+                    ExamLevel = enExamLevel.Intermediate,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 45,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "SQL Database Design",
+                    ExamDescription = "Test your SQL skills including database design, normalization, joins, subqueries, stored procedures, indexes, transactions, and performance optimization techniques.",
+                    ExamLevel = enExamLevel.Intermediate,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 40,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "Data Structures & Algorithms",
+                    ExamDescription = "Assess your knowledge of fundamental data structures like arrays, linked lists, stacks, queues, trees, graphs, hash tables, and algorithms including sorting, searching, recursion, and dynamic programming.",
+                    ExamLevel = enExamLevel.Advanced,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 60,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "JavaScript Essentials",
+                    ExamDescription = "Test your JavaScript knowledge including ES6+ features, closures, promises, async/await, DOM manipulation, event handling, and modern JavaScript best practices.",
+                    ExamLevel = enExamLevel.Beginner,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 30,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "React Development",
+                    ExamDescription = "Evaluate your React.js skills including components, props, state, hooks, context API, Redux, routing, lifecycle methods, and React best practices for building modern web applications.",
+                    ExamLevel = enExamLevel.Intermediate,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 45,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "Angular Framework",
+                    ExamDescription = "Test your Angular knowledge including components, services, dependency injection, routing, forms, HTTP client, RxJS observables, and Angular CLI best practices.",
+                    ExamLevel = enExamLevel.Intermediate,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 45,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "Design Patterns",
+                    ExamDescription = "Assess your understanding of software design patterns including creational patterns (Singleton, Factory, Builder), structural patterns (Adapter, Decorator, Facade), and behavioral patterns (Observer, Strategy, Command).",
+                    ExamLevel = enExamLevel.Advanced,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 50,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "Git Version Control",
+                    ExamDescription = "Test your Git skills including branching, merging, rebasing, cherry-picking, resolving conflicts, Git flow workflow, and collaboration best practices for version control.",
+                    ExamLevel = enExamLevel.Beginner,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 25,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                },
+                new Exam
+                {
+                    ExamName = "Cloud Computing with Azure",
+                    ExamDescription = "Evaluate your Microsoft Azure knowledge including Azure App Services, Azure Functions, Azure SQL, Blob Storage, Azure DevOps, virtual machines, and cloud architecture principles.",
+                    ExamLevel = enExamLevel.Advanced,
+                    ExamType = enExamType.MockExam,
+                    NumberOfQuestions = 10,
+                    DurationInMinutes = 60,
+                    CreatedAt = DateTime.UtcNow.AddDays(-rnd.Next(1, 30)),
+                    IsAi = true
+                }
+            };
+
+            context.Exams.AddRange(mockExams);
+            await context.SaveChangesAsync();
         }
     }
 }

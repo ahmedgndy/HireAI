@@ -11,7 +11,7 @@ namespace HireAI.Data.Models
     {
         public int Id { get; set; }
         public string QuestionText { get; set; } = default!;
-        public string[] Choices = new string[4];
+        public string[] Choices { get; set; } = new string[4];  // Changed to property for EF Core
         public int QuestionNumber { get; set; }
         public int CorrectAnswerIndex { get; set; }
 
