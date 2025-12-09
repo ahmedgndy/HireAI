@@ -1,20 +1,19 @@
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.S3;
+using HireAI.API.Extensions;
 using HireAI.API.Extensions;
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+using HireAI.Infrastructure.GenericBase;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Seeder;
+using HireAI.Service.Interfaces;
+using HireAI.Service.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-using HireAI.Service.Interfaces;
-using HireAI.Infrastructure.GenericBase;
-using HireAI.API.Extensions;
-using Amazon.S3;
-using Amazon.Extensions.NETCore.Setup;
-using Amazon;
 using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;

@@ -22,6 +22,7 @@ namespace HireAI.API.Extensions
             services.AddScoped<IApplicantRepository, ApplicantRepository>();
             services.AddScoped<IApplicantResponseRepository, ApplicantResponseRepository>();
             services.AddScoped<IApplicantSkillRepository, ApplicantSkillRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
 
 
             return services;
