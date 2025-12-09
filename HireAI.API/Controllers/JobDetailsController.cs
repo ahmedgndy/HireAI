@@ -58,18 +58,13 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetJobDetailsAsync(int jobId)
+        public async Task<IActionResult> GetJobDetailsAsync(int jobId ,int hrId)
         {
             try
             {
                 // Get HR ID from JWT token
-                var hrIdClaim = User.FindFirst("HRId")?.Value;
-                
-                if (!int.TryParse(hrIdClaim, out int hrId))
-                {
-                    return Unauthorized(new { error = "HR ID not found in token" });
-                }
-
+                    
+            
                 var jobDetails = await _jobDetailsService.GetJobDetailsAsync(jobId, hrId);
                 return Ok(new
                 {
@@ -134,16 +129,11 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTopApplicantsAsync(int jobId, [FromQuery] int topCount = 10)
+        public async Task<IActionResult> GetTopApplicantsAsync(int jobId,  int hrId , [FromQuery] int topCount = 10)
         {
             try
             {
-                var hrIdClaim = User.FindFirst("HRId")?.Value;
                 
-                if (!int.TryParse(hrIdClaim, out int hrId))
-                {
-                    return Unauthorized(new { error = "HR ID not found in token" });
-                }
 
                 var topApplicants = await _jobDetailsService.GetTopApplicantsAsync(jobId, hrId, topCount);
                 return Ok(new
@@ -170,16 +160,11 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetTopExamTakersAsync(int jobId, [FromQuery] int topCount = 10)
+        public async Task<IActionResult> GetTopExamTakersAsync(int jobId,int hrId, [FromQuery] int topCount = 10)
         {
             try
             {
-                var hrIdClaim = User.FindFirst("HRId")?.Value;
-                
-                if (!int.TryParse(hrIdClaim, out int hrId))
-                {
-                    return Unauthorized(new { error = "HR ID not found in token" });
-                }
+              
 
                 var topExamTakers = await _jobDetailsService.GetTopExamTakersAsync(jobId, hrId, topCount);
                 return Ok(new
