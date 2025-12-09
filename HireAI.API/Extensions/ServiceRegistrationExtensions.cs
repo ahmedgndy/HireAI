@@ -33,6 +33,10 @@ namespace HireAI.API.Extensions
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<ISkillService, SkillService>();
 
+            services.AddScoped<IJobDetailsService, JobDetailsService>();
+
+
+
             return services;
         }
     }
