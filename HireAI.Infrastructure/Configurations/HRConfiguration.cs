@@ -32,15 +32,15 @@ namespace HireAI.Data.Configurations
                )
              .HasDefaultValue(enAccountType.Free);
 
-            builder.HasMany(hr => hr.Payments)
-                .WithOne(p => p.HR)
+            //builder.HasMany(hr => hr.Payments)
+            //    //.WithOne(p => p.HR)
 
-                .HasForeignKey(p => p.
-                Id)
+            //    .HasForeignKey(p => p.
+            //    Id)
 
-                .HasForeignKey(p => p.HrId)
+            //    .HasForeignKey(p => p.HrId)
 
-                .OnDelete(DeleteBehavior.Restrict);
+            //    .OnDelete(DeleteBehavior.Restrict);
            
             // Indexes
             builder.HasIndex(hr => hr.CompanyName);

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using System.Numerics;
 
 
 namespace HireAI.Infrastructure.Context
@@ -33,12 +34,73 @@ namespace HireAI.Infrastructure.Context
         public DbSet<Question> Questions { get; set; } = default!;
         public DbSet<Skill> Skills { get; set; } = default!;
 
+        //DBsets 
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        //public DbSet<Payment> Payments { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<Subscription> Subscriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
+            base.OnModelCreating(modelBuilder);
 
+            //payment method
+            modelBuilder.Entity<PaymentMethod>(entity =>
+            {
+                entity.ToTable("PaymentMethods");
+                entity.HasKey(e => e.Id);
+            });
+
+
+            //payment
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.ToTable("Payments");
+                entity.HasKey(e => e.Id);
+
+                entity.Property(p => p.Amount).HasPrecision(18, 2);
+
+                entity.HasOne(p => p.PaymentMethod)
+                      .WithMany()
+                      .HasForeignKey(p => p.PaymentMethodId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+
+            //plan
+            modelBuilder.Entity<Plan>(entity =>
+            {
+                entity.ToTable("Plans");
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Id).ValueGeneratedOnAdd();
+
+                entity.Property(p => p.MonthlyPrice).HasPrecision(18, 2);
+                entity.Property(p => p.Title).IsRequired();
+            });
+
+
+            //Subscription
+            modelBuilder.Entity<Subscription>(entity =>
+            {
+                entity.ToTable("Subscriptions");
+                entity.HasKey(s => s.Id);
+
+                // No PricePerCycle property anymore
+
+                // Configure relationship using a shadow FK column "PlanId" (PlanId will still exist in DB
+                // but is not exposed on the Subscription CLR type).
+                entity.HasOne(s => s.Plan)
+                      .WithMany()
+                      .HasForeignKey("PlanId")
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.Property<string>("PlanTitle").IsRequired(false);
+                entity.Property<string>("BillingCycle").IsRequired().HasDefaultValue("Monthly");
+                entity.Property<string>("Status").IsRequired().HasDefaultValue("Active");
+            });
             // TPC (Table Per Concrete class) 
-     
+
             modelBuilder.Entity<User>().UseTpcMappingStrategy();
      
             modelBuilder.Entity<HR>().ToTable("HRs");

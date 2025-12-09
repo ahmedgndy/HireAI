@@ -331,35 +331,7 @@ namespace HireAI.Seeder
             await context.SaveChangesAsync();
 
             // ======== HR Payments (a few entries) ========
-            var payments = new List<Payment>
-            {
-                new Payment
-                {
-                    Id = Guid.NewGuid(),
-                    Amount = 49.99m,
-                    BillingPeriod = enBillingPeriod.Monthly,
-                    Currency = "USD",
-                    Status = enPaymentStatus.Completed,
-                    UpgradeTo = enAccountType.Free,
-                    CreatedAt = DateTime.UtcNow.AddMonths(-2),
-                    HrId = hr.Id,
-                    PaymentIntentId = Guid.NewGuid().ToString()
-                },
-                new Payment
-                {
-                    Id = Guid.NewGuid(),
-                    Amount = 99.99m,
-                    BillingPeriod = enBillingPeriod.Monthly,
-                    Currency = "USD",
-                    Status = enPaymentStatus.Completed,
-                    UpgradeTo = enAccountType.Pro,
-                    CreatedAt = DateTime.UtcNow.AddMonths(-1),
-                    HrId = hr.Id,
-                    PaymentIntentId = Guid.NewGuid().ToString()
-                }
-            };
-            context.Payments.AddRange(payments);
-            await context.SaveChangesAsync();
+            
         }
     }
 }

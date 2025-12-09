@@ -1,15 +1,18 @@
+using HireAI.API.Extensions;
 using HireAI.Data.Models.Identity;
 using HireAI.Infrastructure.Context;
+using HireAI.Infrastructure.GenericBase;
+using HireAI.Infrastructure.Interfaces;
 using HireAI.Infrastructure.Intrefaces;
 using HireAI.Infrastructure.Mappings;
 using HireAI.Infrastructure.Repositories;
-using HireAI.Service.Implementation;
 using HireAI.Seeder;
+using HireAI.Service.Implementation;
+using HireAI.Service.Interfaces;
+using HireAI.Service.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using HireAI.Service.Interfaces;
-using HireAI.Infrastructure.GenericBase;
-using HireAI.API.Extensions;
+using Stripe;
 
 
 
@@ -34,7 +37,7 @@ namespace HireAI.API
             #region Register DbContext and Services in the DI Container
             builder.Services.AddDbContext<HireAIDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("HireAiDB"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             //REGISTER ApplicationUser and IdentityRole with the DI Container
@@ -63,6 +66,16 @@ namespace HireAI.API
             // Register repositories and services using extension methods
             builder.Services.AddApplicationRepositories();
             builder.Services.AddApplicationServices();
+            #endregion
+
+            #region Payment service and repository 
+            // Repositories & services
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<IPaymentMethodRepository, PaymentMethodRepository>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+
+            // Stripe key
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
             #endregion
 
             #region Add AutoMapper service

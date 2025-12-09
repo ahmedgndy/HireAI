@@ -1,6 +1,7 @@
-﻿using HireAI.Data.Helpers.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,24 +10,21 @@ namespace HireAI.Data.Models
 {
     public class Payment
     {
-
-        public Guid Id { get; set; }
-        public string PaymentIntentId { get; set; } // Stripe/PayPal ID
+        public int Id { get; set; }
+        // amount >> money
         public decimal Amount { get; set; }
+        //usd>>doller 
         public string Currency { get; set; } = "USD";
-        public enPaymentStatus Status { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? CompletedAt { get; set; }
+        public string Description { get; set; } = string.Empty;
+        public string StripePaymentIntentId { get; set; } = string.Empty;
+        public string Status { get; set; } = "pending";
 
-        // What they're upgrading to
-        public enAccountType UpgradeTo { get; set; }
-        public enBillingPeriod BillingPeriod { get; set; }
+        // FK to PaymentMethod
+        public int PaymentMethodId { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
+        //public string PaymentIntentId { get; set; }
 
-        //Foreign Keys
-        public int HrId { get; set; }
-
-        //Navigation Property
-        public HR? HR { get; set; }
-
+        //public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        //public DateTime? UpdatedAt { get; set; }
     }
 }
