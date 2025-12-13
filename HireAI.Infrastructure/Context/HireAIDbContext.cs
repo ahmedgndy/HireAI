@@ -33,6 +33,7 @@ namespace HireAI.Infrastructure.Context
         public DbSet<Question> Questions { get; set; } = default!;
         public DbSet<Skill> Skills { get; set; } = default!;
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; } = default!;
+        //public DbSet<Admin> Admins { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

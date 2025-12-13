@@ -181,7 +181,11 @@ namespace HireAI.Service.Services
 
         public async Task<ICollection<JobPostResponseDto>> GetAllJobPostsAsync()
         {
-            var jobs = await _jobPostRepository.GetAll().ToListAsync();
+            var jobs = await _jobPostRepository.GetAll().
+                AsNoTracking()
+                .Include(j => j.HR)
+                .Include(j => j.Applications)
+                .ToListAsync();
             var jobdto = _mapper.Map<ICollection<JobPostResponseDto>>(jobs);
             return jobdto;
         }

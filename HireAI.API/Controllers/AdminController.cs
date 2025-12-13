@@ -46,7 +46,7 @@ namespace HireAI.API.Controllers
         #region ApplicantControl
 
 
-        [HttpGet("GetAllApplicants")]
+        [HttpGet("AllApplicants")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllApplicantAsync()
         {
@@ -99,18 +99,20 @@ namespace HireAI.API.Controllers
         #region HRControl
 
 
-        [HttpGet("GetAllHR")]
+        [HttpGet("AllHRs")]
         public async Task<IActionResult> GettAllHRAsync()
         {
             var hrs = await _hrService.GetAllHRAsync();
             return Ok(hrs);
         }
+
         [HttpPut("HRUpdate/{hrId:int}")]
         public async Task<IActionResult> UpdateHRAsync(int hrId, [FromBody] HRUpdateDto hrUpdateDto)
         {
             await _hrService.UpdateHRAsync(hrId, hrUpdateDto);
             return Ok();
         }
+
         [HttpDelete("HRDelete/{hrId:int}")]
         public async Task<IActionResult> DeleteHRAsync(int hrId)
         {

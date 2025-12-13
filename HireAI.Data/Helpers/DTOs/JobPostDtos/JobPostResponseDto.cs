@@ -48,7 +48,9 @@ namespace HireAI.Data.Helpers.DTOs.JobOpeningDtos.Response
 
             public bool AutoSend { get; set; }
 
-            public int HRId { get; set; }
+            public int? HRId { get; set; }
+
+            public string? HRName { get; set; }
 
             public ICollection<SkillResponseDto>? Skills { get; set; }
 

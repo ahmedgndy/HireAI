@@ -64,6 +64,7 @@ namespace HireAI.Service.Mapping
                 .ForMember(dest => dest.ATSMinimumScore, opt => opt.MapFrom(src => src.ATSMinimumScore))
                 .ForMember(dest => dest.AutoSend, opt => opt.MapFrom(src => src.AutoSend))
                 .ForMember(dest => dest.HRId, opt => opt.MapFrom(src => src.HRId))
+                .ForMember(HR => HR.HRName, opt => opt.MapFrom(src => src.HR != null ? src.HR.FullName : null))
                 .ForMember(dest => dest.Skills, opt => opt.MapFrom(src =>
                     src.JobSkills != null && src.JobSkills.Any()
                         ? src.JobSkills.Select(js => new SkillResponseDto
