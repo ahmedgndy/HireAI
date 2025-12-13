@@ -35,8 +35,10 @@ namespace HireAI.Data.Helpers.DTOs.Applicant.Request
         [StringLength(500)]
         public string? Bio { get; set; }
 
+        public bool? IsActive { get; set; } = true;
+
         //[Required(ErrorMessage = "Resume File PDF is required")]
-        public IFormFile? CvFile { get; set; }
+        public string? ResumeUrl { get; set; }
 
         public enSkillLevel? SkillLevel { get; set; } = enSkillLevel.Beginner;
     }

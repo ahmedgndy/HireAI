@@ -23,8 +23,8 @@ namespace HireAI.Service.Mapping
                 .ForMember(dest => dest.SkillName, opt => opt.MapFrom(src => src.Skill != null ? src.Skill.Name : string.Empty));
 
             // Add mapping for ApplicantUpdateDto to Applicant
-            CreateMap<ApplicantUpdateDto, Applicant>()
-                .ForMember(dest => dest.ResumeUrl, opt => opt.Ignore()); // File upload handled separately in service
+            CreateMap<ApplicantUpdateDto, Applicant>();
+                //.ForMember(dest => dest.ResumeUrl, opt => opt.Ignore()); // File upload handled separately in service
 
 
             CreateMap<Applicant, ApplicantResponseDto>();

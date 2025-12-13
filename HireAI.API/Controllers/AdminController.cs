@@ -58,7 +58,7 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ApplicantUpdateAsync(int id, [FromForm] ApplicantUpdateDto applicantDto)
+        public async Task<IActionResult> ApplicantUpdateAsync(int id, [FromBody] ApplicantUpdateDto applicantDto)
         {
             if (id != applicantDto.Id)
                 return BadRequest();
@@ -76,7 +76,7 @@ namespace HireAI.API.Controllers
             return Ok(updatedApplicant);
         }
 
-        [HttpDelete("/ApplicantDelete{id}")]
+        [HttpDelete("ApplicantDelete/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> ApplicantDeleteAsync(int id)
