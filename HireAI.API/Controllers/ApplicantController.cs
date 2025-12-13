@@ -106,12 +106,6 @@ namespace HireAI.API.Controllers
             if (existingApplicant == null)
                 return NotFound();
 
-            // Check if the current applicant is the owner of the applicant data
-            //if (!User.FindFirst(ClaimTypes.Role)?.Value == "Admin")
-            //{
-               
-            //}
-
             if (!await _authorizationService.ValidateApplicantOwnershipAsync(User, id))
                 return Forbid();
 
@@ -130,8 +124,8 @@ namespace HireAI.API.Controllers
                 return NotFound();
 
             // Check if the current applicant is the owner of the applicant data
-            if (!await _authorizationService.ValidateApplicantOwnershipAsync(User, id))
-                return Forbid();
+            //if (!await _authorizationService.ValidateApplicantOwnershipAsync(User, id))
+            //    return Forbid();
 
             await _applicantService.DeleteApplicantAsync(id);
             return NoContent();
