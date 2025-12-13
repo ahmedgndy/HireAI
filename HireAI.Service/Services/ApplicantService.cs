@@ -48,18 +48,18 @@ namespace HireAI.Service.Services
             var applicant = _mapper.Map<Applicant>(applicantDto);
 
             // Handle file upload separately
-            if (applicantDto.CvFile != null)
-            {
-                applicant.ResumeUrl = await _s3Service.UploadFileAsync(applicantDto.CvFile);
-            }
-            else
-            {
-                var existingApplicant = await _applicantRepository.GetByIdAsync(applicantDto.Id);
-                if (existingApplicant != null)
-                {
-                    applicant.ResumeUrl = existingApplicant.ResumeUrl;
-                }
-            }
+            //if (applicantDto.CvFile != null)
+            //{
+            //    applicant.ResumeUrl = await _s3Service.UploadFileAsync(applicantDto.CvFile);
+            //}
+            //else
+            //{
+            //    var existingApplicant = await _applicantRepository.GetByIdAsync(applicantDto.Id);
+            //    if (existingApplicant != null)
+            //    {
+            //        applicant.ResumeUrl = existingApplicant.ResumeUrl;
+            //    }
+            //}
 
             var updatedApplicant = await _applicantRepository.UpdateAsync(applicant);
             return _mapper.Map<ApplicantResponseDto>(updatedApplicant);
