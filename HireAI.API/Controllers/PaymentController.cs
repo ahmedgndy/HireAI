@@ -31,19 +31,6 @@ public class PaymentController : ControllerBase
     }
 
     /// <summary>
-    /// Gets the current HR user's ID from claims
-    /// </summary>
-    private async Task<int?> GetCurrentHRIdAsync()
-    {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (string.IsNullOrEmpty(userIdClaim))
-            return null;
-
-        var user = await _userManager.FindByIdAsync(userIdClaim);
-        return user?.HRId;
-    }
-
-    /// <summary>
     /// Creates or retrieves a Stripe customer for the current HR user
     /// </summary>
     [HttpPost("customer/setup")]
@@ -282,5 +269,18 @@ public class PaymentController : ControllerBase
         await _db.SaveChangesAsync();
         
         return Ok(new { message = $"Plan confirmed: {plan}" });
+    }
+
+    /// <summary>
+    /// Gets the current HR user's ID from claims
+    /// </summary>
+    private async Task<int?> GetCurrentHRIdAsync()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim))
+            return null;
+
+        var user = await _userManager.FindByIdAsync(userIdClaim);
+        return user?.HRId;
     }
 }

@@ -38,7 +38,7 @@ namespace HireAI.API.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [Authorize(Roles = "Applicant")]
+        [Authorize(Roles = "Applicant,Admin")]
         public async Task<IActionResult> GetAllAsync()
         {
             var applicants = await _applicantService.GetAllApplicantsAsync();
@@ -175,7 +175,7 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Applicant,HR")]
+        [Authorize(Roles = "Applicant,HR,Admin")]
         public async Task<IActionResult> DownloadResumeAsync([FromQuery] string fileKey)
         {
             if (string.IsNullOrWhiteSpace(fileKey))
@@ -209,7 +209,7 @@ namespace HireAI.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Applicant,HR")]
+        [Authorize(Roles = "Applicant,HR,Admin")]
         public async Task<IActionResult> DownloadResumeByUrlAsync([FromQuery] string s3Url)
         {
             if (string.IsNullOrWhiteSpace(s3Url))
